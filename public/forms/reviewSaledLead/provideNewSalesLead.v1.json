@@ -1,0 +1,64 @@
+{
+  "list": [{
+      "type": "input",
+      "name": "姓名名",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false
+      },
+      "key": "1576487863000_68674",
+      "model": "customerName",
+      "rules": [{
+        "type": "string",
+        "message": "客户名格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "name": "利润空间",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "number",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false
+      },
+      "key": "1576487875000_37539",
+      "model": "potentialProfit",
+      "rules": [{
+        "type": "number",
+        "message": "可能的利润格式不正确"
+      }]
+    },
+    {
+      "type": "textarea",
+      "name": "详细",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": ""
+      },
+      "key": "1576487876000_76158",
+      "model": "details",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small"
+  }
+}

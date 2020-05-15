@@ -1,0 +1,46 @@
+{
+  "list": [{
+    "type": "radio",
+    "name": "是否批准",
+    "icon": "icon-radio-active",
+    "options": {
+      "inline": false,
+      "defaultValue": "true",
+      "showLabel": true,
+      "options": [{
+          "value": "true",
+          "label": "批准"
+        },
+        {
+          "value": "false",
+          "label": "不批准"
+        }
+      ],
+      "required": true,
+      "width": "",
+      "remote": false,
+      "remoteOptions": [],
+      "props": {
+        "value": "value",
+        "label": "label"
+      },
+      "remoteFunc": "func_1576718313000_42024",
+      "disabled": false
+    },
+    "key": "1576718313000_42024",
+    "model": "approved",
+    "rules": [{
+      "required": true,
+      "message": "是否批准必须填写"
+    }]
+  }],
+  "config": {
+    "scope": "local",
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "appReview",
+    "name": "申请审批"
+  }
+}

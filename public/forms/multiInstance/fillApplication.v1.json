@@ -1,0 +1,30 @@
+{
+  "list": [{
+    "type": "textarea",
+    "name": "申请内容",
+    "icon": "icon-diy-com-textarea",
+    "options": {
+      "width": "100%",
+      "defaultValue": "",
+      "required": true,
+      "disabled": false,
+      "pattern": "",
+      "placeholder": "",
+      "remoteFunc": "func_1576718510000_6568"
+    },
+    "key": "1576718510000_6568",
+    "model": "appContent",
+    "rules": [{
+      "required": true,
+      "message": "申请内容必须填写"
+    }]
+  }],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "fillApplication",
+    "name": "填写申请"
+  }
+}

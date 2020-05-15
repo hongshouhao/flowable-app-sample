@@ -1,0 +1,24 @@
+{
+  "list": [{
+    "type": "textarea",
+    "name": "Additional details",
+    "icon": "icon-diy-com-textarea",
+    "options": {
+      "width": "100%",
+      "defaultValue": "",
+      "required": false,
+      "disabled": false,
+      "pattern": "",
+      "placeholder": ""
+    },
+    "key": "1576488554000_80143",
+    "model": "details",
+    "rules": []
+  }],
+  "config": {
+    "labelWidth": 200,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": ""
+  }
+}

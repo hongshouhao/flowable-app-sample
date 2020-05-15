@@ -1,0 +1,45 @@
+{
+  "list": [{
+    "type": "select",
+    "name": "你认为该客户是否是潜在优质客户",
+    "icon": "icon-select",
+    "options": {
+      "defaultValue": "false",
+      "multiple": false,
+      "disabled": false,
+      "clearable": false,
+      "placeholder": "",
+      "required": true,
+      "showLabel": true,
+      "width": "",
+      "options": [{
+          "value": "true",
+          "label": "不是"
+        },
+        {
+          "value": "false",
+          "label": "是的"
+        }
+      ],
+      "remote": false,
+      "filterable": false,
+      "remoteOptions": [],
+      "props": {
+        "value": "value",
+        "label": "label"
+      }
+    },
+    "key": "1576488152000_37389",
+    "model": "notEnoughInformation",
+    "rules": [{
+      "required": true,
+      "message": "你认为该客户是否是潜在优质客户必须填写"
+    }]
+  }],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": ""
+  }
+}

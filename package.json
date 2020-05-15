@@ -8,8 +8,17 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.19.0",
     "core-js": "^3.4.4",
-    "vue": "^2.6.10"
+    "element-ui": "^2.13.0",
+    "flowable-js-api": "file:../../flowable-js-api",
+    "form-making": "^1.2.7",
+    "linq": "^3.2.1",
+    "vue": "^2.6.10",
+    "vue-async-computed": "^3.7.0",
+    "vue-lazyload": "^1.3.3",
+    "vue-router": "^3.1.3",
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
@@ -17,7 +26,10 @@
     "@vue/cli-service": "^4.1.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -29,9 +41,18 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "no-console": 0,
+      "no-debugger": 0,
+      "no-unused-vars": 0
+    },
     "parserOptions": {
       "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
     }
   },
   "browserslist": [

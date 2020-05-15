@@ -1,0 +1,33 @@
+{
+  "list": [{
+    "type": "input",
+    "name": "审批结果",
+    "icon": "icon-input",
+    "options": {
+      "width": "100%",
+      "defaultValue": "",
+      "required": true,
+      "dataType": "string",
+      "pattern": "",
+      "placeholder": "",
+      "disabled": true
+    },
+    "key": "1576717596000_83057",
+    "model": "result",
+    "rules": [{
+      "type": "string",
+      "message": "审批结果格式不正确"
+    }, {
+      "required": true,
+      "message": "审批结果必须填写"
+    }]
+  }],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "applicationResult",
+    "name": "审批结果"
+  }
+}

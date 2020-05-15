@@ -1,0 +1,137 @@
+{
+  "list": [{
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "customClass": "",
+        "disabled": false,
+        "labelWidth": 100,
+        "isLabelWidth": false,
+        "hidden": false,
+        "dataBind": true,
+        "showPassword": false
+      },
+      "name": "Name",
+      "novalid": {},
+      "key": "name",
+      "model": "name",
+      "rules": [{
+        "type": "string",
+        "message": "Name格式不正确"
+      }]
+    },
+    {
+      "type": "grid",
+      "icon": "icon-RectangleCopy",
+      "columns": [{
+          "span": 12,
+          "list": [{
+            "type": "date",
+            "icon": "icon-date",
+            "options": {
+              "defaultValue": "",
+              "readonly": false,
+              "disabled": false,
+              "editable": true,
+              "clearable": true,
+              "placeholder": "",
+              "startPlaceholder": "",
+              "endPlaceholder": "",
+              "type": "date",
+              "format": "yyyy-MM-dd",
+              "timestamp": false,
+              "required": false,
+              "width": "",
+              "customClass": "",
+              "labelWidth": 100,
+              "isLabelWidth": false,
+              "hidden": false,
+              "dataBind": true
+            },
+            "name": "开始时间",
+            "novalid": {},
+            "key": "vacationstartingfrom",
+            "model": "vacationstartingfrom",
+            "rules": []
+          }]
+        },
+        {
+          "span": 12,
+          "list": [{
+            "type": "date",
+            "icon": "icon-date",
+            "options": {
+              "defaultValue": "",
+              "readonly": false,
+              "disabled": false,
+              "editable": true,
+              "clearable": true,
+              "placeholder": "",
+              "startPlaceholder": "",
+              "endPlaceholder": "",
+              "type": "date",
+              "format": "yyyy-MM-dd",
+              "timestamp": false,
+              "required": false,
+              "width": "",
+              "customClass": "",
+              "labelWidth": 100,
+              "isLabelWidth": false,
+              "hidden": false,
+              "dataBind": true
+            },
+            "name": "结束时间",
+            "key": "vacationuntil",
+            "model": "vacationuntil",
+            "rules": []
+          }]
+        }
+      ],
+      "options": {
+        "gutter": 0,
+        "justify": "start",
+        "align": "top",
+        "customClass": "",
+        "hidden": false,
+        "remoteFunc": "func_1571187784871"
+      },
+      "name": "栅格布局",
+      "key": "1571187784871",
+      "model": "grid_1571187784871",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": "",
+        "customClass": "",
+        "labelWidth": 100,
+        "isLabelWidth": false,
+        "hidden": false,
+        "dataBind": true
+      },
+      "name": "Remarks",
+      "key": "remarks",
+      "model": "remarks",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 180,
+    "labelPosition": "left",
+    "size": "small",
+    "customClass": ""
+  }
+}
