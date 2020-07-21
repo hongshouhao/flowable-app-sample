@@ -1,20 +1,22 @@
 <template>
-  <fm-generate-form ref="generateForm" :data="metadata" :value="value" />
+  <fm-generate-form ref="generateForm"
+                    :data="metadata"
+                    :value="value" />
 </template>
 
 <script>
 import convert from './actFormDataConvert'
 
 export default {
-  data() {
+  data () {
     return {
       value: {},
       metadata: { config: { size: '0' }, list: [] }
     }
   },
-  mounted() {},
+  mounted () { },
   methods: {
-    setValues(procDefKey, formFields) {
+    setValues (procDefKey, formFields) {
       this.value = convert.to(formFields)
       console.log(this.value)
       const formJsonFile = `/forms/${procDefKey}/${formFields.key.replace(
@@ -26,9 +28,15 @@ export default {
         console.log(this.metadata)
       })
     },
-    getValues() {
+    getValues () {
       return this.$refs.generateForm.getData().then(data => {
-        return convert.from(data, this.metadata)
+        if (typeof this.metadata.localScope === undefined) {
+          this.metadata.localScope = false
+        }
+        return {
+          variables: convert.from(data, this.metadata),
+          localScope: this.metadata.localScope
+        }
       })
     }
   }

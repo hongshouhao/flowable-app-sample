@@ -1,0 +1,68 @@
+{
+  "list": [{
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594719012000_40821"
+      },
+      "name": "需求架构",
+      "key": "1594719012000_40821",
+      "model": "xuqiujiagou",
+      "rules": [{
+        "type": "string",
+        "message": "需求架构格式不正确"
+      }]
+    },
+    {
+      "type": "number",
+      "icon": "icon-number",
+      "options": {
+        "width": "",
+        "required": false,
+        "defaultValue": 0,
+        "min": 0,
+        "max": 0,
+        "step": 1,
+        "disabled": false,
+        "controlsPosition": "",
+        "remoteFunc": "func_1594719022000_61871"
+      },
+      "name": "效益分析分数",
+      "key": "1594719022000_61871",
+      "model": "xiaoyifenxifenshu",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": "",
+        "remoteFunc": "func_1594719038000_3238"
+      },
+      "name": "效益分析描述",
+      "key": "1594719038000_3238",
+      "model": "xiaoyifenximiaoshu",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "xiangmuxuqiu",
+    "name": "项目需求"
+  }
+}

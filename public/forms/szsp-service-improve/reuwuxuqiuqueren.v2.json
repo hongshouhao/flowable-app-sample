@@ -1,0 +1,177 @@
+{
+  "list": [{
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594717858000_78339"
+      },
+      "name": "紧急程度",
+      "key": "1594717858000_78339",
+      "model": "jinjichengdu",
+      "rules": [{
+        "type": "string",
+        "message": "紧急程度格式不正确"
+      }]
+    },
+    {
+      "type": "date",
+      "icon": "icon-date",
+      "options": {
+        "defaultValue": "",
+        "readonly": false,
+        "disabled": false,
+        "editable": true,
+        "clearable": true,
+        "placeholder": "",
+        "startPlaceholder": "",
+        "endPlaceholder": "",
+        "type": "date",
+        "format": "yyyy-MM-dd",
+        "timestamp": false,
+        "required": false,
+        "width": "",
+        "remoteFunc": "func_1594717866000_21003"
+      },
+      "name": "期望完成时间",
+      "key": "1594717866000_21003",
+      "model": "qiwangwanchengriqi",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": "",
+        "remoteFunc": "func_1594717873000_49630"
+      },
+      "name": "任务内容",
+      "key": "1594717873000_49630",
+      "model": "renwuneirong",
+      "rules": []
+    },
+    {
+      "type": "imgupload",
+      "icon": "icon-tupian",
+      "options": {
+        "defaultValue": [],
+        "size": {
+          "width": 100,
+          "height": 100
+        },
+        "width": "",
+        "tokenFunc": "funcGetToken",
+        "token": "",
+        "domain": "http://pfp81ptt6.bkt.clouddn.com/",
+        "disabled": false,
+        "length": 8,
+        "multiple": false,
+        "isQiniu": false,
+        "isDelete": false,
+        "min": 0,
+        "isEdit": false,
+        "action": "https://jsonplaceholder.typicode.com/photos/",
+        "remoteFunc": "func_1594718287000_36183"
+      },
+      "name": "需求分析",
+      "key": "1594718287000_36183",
+      "model": "xuqiufenxi",
+      "rules": []
+    },
+    {
+      "type": "imgupload",
+      "icon": "icon-tupian",
+      "options": {
+        "defaultValue": [],
+        "size": {
+          "width": 100,
+          "height": 100
+        },
+        "width": "",
+        "tokenFunc": "funcGetToken",
+        "token": "",
+        "domain": "http://pfp81ptt6.bkt.clouddn.com/",
+        "disabled": false,
+        "length": 8,
+        "multiple": false,
+        "isQiniu": false,
+        "isDelete": false,
+        "min": 0,
+        "isEdit": false,
+        "action": "https://jsonplaceholder.typicode.com/photos/",
+        "remoteFunc": "func_1594718308000_52608"
+      },
+      "name": "需求确认单",
+      "key": "1594718308000_52608",
+      "model": "xuqiuquerendan",
+      "rules": []
+    },
+    {
+      "type": "date",
+      "icon": "icon-date",
+      "options": {
+        "defaultValue": "",
+        "readonly": false,
+        "disabled": false,
+        "editable": true,
+        "clearable": true,
+        "placeholder": "",
+        "startPlaceholder": "",
+        "endPlaceholder": "",
+        "type": "date",
+        "format": "yyyy-MM-dd",
+        "timestamp": false,
+        "required": false,
+        "width": "",
+        "remoteFunc": "func_1594718396000_62322"
+      },
+      "name": "开始时间",
+      "key": "1594718396000_62322",
+      "model": "kaishishijian",
+      "rules": []
+    },
+    {
+      "type": "date",
+      "icon": "icon-date",
+      "options": {
+        "defaultValue": "",
+        "readonly": false,
+        "disabled": false,
+        "editable": true,
+        "clearable": true,
+        "placeholder": "",
+        "startPlaceholder": "",
+        "endPlaceholder": "",
+        "type": "date",
+        "format": "yyyy-MM-dd",
+        "timestamp": false,
+        "required": false,
+        "width": "",
+        "remoteFunc": "func_1594718405000_16683"
+      },
+      "name": "结束时间",
+      "key": "1594718405000_16683",
+      "model": "jiesushijian",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "reuwuxuqiuqueren",
+    "name": "任务需求确认"
+  }
+}

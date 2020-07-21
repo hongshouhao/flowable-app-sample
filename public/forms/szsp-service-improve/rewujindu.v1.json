@@ -1,0 +1,27 @@
+{
+  "list": [{
+    "type": "textarea",
+    "icon": "icon-diy-com-textarea",
+    "options": {
+      "width": "100%",
+      "defaultValue": "",
+      "required": false,
+      "disabled": false,
+      "pattern": "",
+      "placeholder": "",
+      "remoteFunc": "func_1594718542000_62204"
+    },
+    "name": "进度",
+    "key": "1594718542000_62204",
+    "model": "jindu",
+    "rules": []
+  }],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "rewujindu",
+    "name": "任务进度"
+  }
+}

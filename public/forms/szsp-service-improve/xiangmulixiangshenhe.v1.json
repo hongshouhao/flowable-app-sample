@@ -1,0 +1,60 @@
+{
+  "list": [{
+      "type": "radio",
+      "icon": "icon-radio-active",
+      "options": {
+        "inline": false,
+        "defaultValue": "true",
+        "showLabel": false,
+        "options": [{
+            "value": "true",
+            "label": "继续推进"
+          },
+          {
+            "value": "false",
+            "label": "不推进"
+          }
+        ],
+        "required": false,
+        "width": "",
+        "remote": false,
+        "remoteOptions": [],
+        "props": {
+          "value": "value",
+          "label": "label"
+        },
+        "remoteFunc": "func_1594718752000_29281",
+        "disabled": false
+      },
+      "name": "审核结果",
+      "key": "1594718752000_29281",
+      "model": "shenhejieguo",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": "",
+        "remoteFunc": "func_1594718777000_8473"
+      },
+      "name": "审核意见",
+      "key": "1594718777000_8473",
+      "model": "shenheyijian",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "xiangmulixiangshenhe",
+    "name": "项目立项审核"
+  }
+}

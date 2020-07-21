@@ -141,8 +141,8 @@ export default {
             let taskActionRequest = {
               action: targAction,
               assignee: targUser,
-              variables: data,
-              localScope: true
+              variables: data.variables,
+              localScope: data.localScope
             }
 
             this.$flowableClient.tasks

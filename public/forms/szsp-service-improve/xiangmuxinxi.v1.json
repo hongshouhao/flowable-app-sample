@@ -1,0 +1,179 @@
+{
+  "list": [{
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718869000_66452"
+      },
+      "name": "编号",
+      "key": "1594718869000_66452",
+      "model": "bianhao",
+      "rules": [{
+        "type": "string",
+        "message": "编号格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718878000_86974"
+      },
+      "name": "提出单位",
+      "key": "1594718878000_86974",
+      "model": "tichudanwei",
+      "rules": [{
+        "type": "string",
+        "message": "提出单位格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718887000_95431"
+      },
+      "name": "联系人",
+      "key": "1594718887000_95431",
+      "model": "lianxiren",
+      "rules": [{
+        "type": "string",
+        "message": "联系人格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718898000_69258"
+      },
+      "name": "联系方式",
+      "key": "1594718898000_69258",
+      "model": "lianxifangshi",
+      "rules": [{
+        "type": "string",
+        "message": "联系方式格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718915000_51529"
+      },
+      "name": "来源",
+      "key": "1594718915000_51529",
+      "model": "laiyuan",
+      "rules": [{
+        "type": "string",
+        "message": "来源格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718923000_36918"
+      },
+      "name": "紧急程度",
+      "key": "1594718923000_36918",
+      "model": "jinjichengdu",
+      "rules": [{
+        "type": "string",
+        "message": "紧急程度格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718934000_64902"
+      },
+      "name": "描述",
+      "key": "1594718934000_64902",
+      "model": "miaoshu",
+      "rules": [{
+        "type": "string",
+        "message": "描述格式不正确"
+      }]
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594718946000_19456"
+      },
+      "name": "备注",
+      "key": "1594718946000_19456",
+      "model": "beizhu",
+      "rules": [{
+        "type": "string",
+        "message": "备注格式不正确"
+      }]
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "xiangmuxinxi",
+    "name": "项目信息"
+  }
+}

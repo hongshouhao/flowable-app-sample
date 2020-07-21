@@ -2,7 +2,8 @@
   <div v-if="procDef.startFormDefined">
     <form-data-view ref="formDataView" />
     <el-row>
-      <el-button type="primary" @click="startTask()">开始</el-button>
+      <el-button type="primary"
+                 @click="startTask()">开始</el-button>
     </el-row>
   </div>
 </template>
@@ -11,7 +12,7 @@
 import formDataView from './FormDataView'
 
 export default {
-  data() {
+  data () {
     return {
       formName: '',
       metadata: { config: { size: '0' }, list: [] }
@@ -20,19 +21,19 @@ export default {
   props: {
     procDef: {
       type: Object,
-      default() {
+      default () {
         return null
       }
     }
   },
-  mounted() {
+  mounted () {
     if (this.procDef.startFormDefined) {
       this.refreshView()
     }
   },
   computed: {},
   methods: {
-    refreshView() {
+    refreshView () {
       this.$flowableClient.processDefinitions
         .getStartForm(this.procDef.id)
         .then(response => {
@@ -43,13 +44,13 @@ export default {
           this.$emit('afterFormLoaded', this.metadata)
         })
     },
-    startTask() {
+    startTask () {
       this.$refs.formDataView
         .getValues()
         .then(data => {
           this.$flowableClient.processInstances.startProcessInstance({
             processDefinitionId: this.procDef.id,
-            variables: data,
+            variables: data.variables,
             returnVariables: true
           })
         })

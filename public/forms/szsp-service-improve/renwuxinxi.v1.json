@@ -1,0 +1,105 @@
+{
+  "list": [{
+      "type": "radio",
+      "icon": "icon-radio-active",
+      "options": {
+        "inline": false,
+        "defaultValue": "true",
+        "showLabel": false,
+        "options": [{
+            "value": "true",
+            "label": "是"
+          },
+          {
+            "value": "false",
+            "label": "否"
+          }
+        ],
+        "required": false,
+        "width": "",
+        "remote": false,
+        "remoteOptions": [],
+        "props": {
+          "value": "value",
+          "label": "label"
+        },
+        "remoteFunc": "func_1594717823000_83679",
+        "disabled": false
+      },
+      "name": "是否是合同内",
+      "key": "1594717823000_83679",
+      "model": "shifoushihetongnei",
+      "rules": []
+    },
+    {
+      "type": "input",
+      "icon": "icon-input",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "dataType": "string",
+        "pattern": "",
+        "placeholder": "",
+        "disabled": false,
+        "remoteFunc": "func_1594717858000_78339"
+      },
+      "name": "紧急程度",
+      "key": "1594717858000_78339",
+      "model": "jinjichengdu",
+      "rules": [{
+        "type": "string",
+        "message": "紧急程度格式不正确"
+      }]
+    },
+    {
+      "type": "date",
+      "icon": "icon-date",
+      "options": {
+        "defaultValue": "",
+        "readonly": false,
+        "disabled": false,
+        "editable": true,
+        "clearable": true,
+        "placeholder": "",
+        "startPlaceholder": "",
+        "endPlaceholder": "",
+        "type": "date",
+        "format": "yyyy-MM-dd",
+        "timestamp": false,
+        "required": false,
+        "width": "",
+        "remoteFunc": "func_1594717866000_21003"
+      },
+      "name": "期望完成时间",
+      "key": "1594717866000_21003",
+      "model": "qiwangwanchengriqi",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "disabled": false,
+        "pattern": "",
+        "placeholder": "",
+        "remoteFunc": "func_1594717873000_49630"
+      },
+      "name": "任务内容",
+      "key": "1594717873000_49630",
+      "model": "renwuneirong",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "key": "renwuxinxi",
+    "name": "项目任务"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "list": [{
+      "type": "radio",
+      "icon": "icon-radio-active",
+      "options": {
+        "inline": false,
+        "defaultValue": "true",
+        "showLabel": false,
+        "options": [{
+            "value": "true",
+            "label": "通过"
+          },
+          {
+            "label": "不通过",
+            "value": "false"
+          }
+        ],
+        "required": false,
+        "requiredMessage": "",
+        "width": "",
+        "remote": false,
+        "remoteType": "option",
+        "remoteOption": "option_1594717250242",
+        "remoteOptions": [],
+        "props": {
+          "value": "value",
+          "label": "label"
+        },
+        "remoteFunc": "func_1594717250242",
+        "customClass": "",
+        "labelWidth": 100,
+        "isLabelWidth": false,
+        "hidden": false,
+        "dataBind": true,
+        "disabled": false
+      },
+      "name": "审核结果",
+      "key": "1594717250242",
+      "model": "shenhejieguo",
+      "rules": []
+    },
+    {
+      "type": "textarea",
+      "icon": "icon-diy-com-textarea",
+      "options": {
+        "width": "100%",
+        "defaultValue": "",
+        "required": false,
+        "requiredMessage": "",
+        "disabled": false,
+        "pattern": "",
+        "patternMessage": "",
+        "placeholder": "",
+        "customClass": "",
+        "labelWidth": 100,
+        "isLabelWidth": false,
+        "hidden": false,
+        "dataBind": true,
+        "remoteFunc": "func_1594717354898",
+        "remoteOption": "option_1594717354898"
+      },
+      "name": "审核意见",
+      "key": "1594717354898",
+      "model": "shenheyijian",
+      "rules": []
+    }
+  ],
+  "config": {
+    "labelWidth": 100,
+    "labelPosition": "right",
+    "size": "small",
+    "customClass": "",
+    "ui": "element",
+    "layout": "horizontal",
+    "labelCol": 3,
+    "width": "100%",
+    "hideLabel": false,
+    "hideErrorMessage": false,
+    "key": "renwujieguoshenhe",
+    "name": "任务结果审核"
+  }
+}

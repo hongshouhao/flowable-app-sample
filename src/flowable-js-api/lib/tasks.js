@@ -183,7 +183,7 @@ function TasksResource (options, http) {
          * @returns {AxiosPromise<any> | *}
          */
   this.executeAction = (taskId, taskActionRequest) => {
-    return http.post(resourcePath + `-extension/${taskId}`, taskActionRequest,
+    return http.post(resourcePath + `-extensions/${taskId}`, taskActionRequest,
       getRequestArgs()
     )
   }

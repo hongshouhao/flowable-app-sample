@@ -74,7 +74,7 @@ export default {
       processInstanceId: null,
       list: [],
       listDisplaied: [],
-      pageSize: 15,
+      pageSize: 10,
       currentPage: 1,
       startFormTitle: '',
       startFormVisible: false,
@@ -89,8 +89,11 @@ export default {
     }
   },
   mounted () {
+    let queryParams = { key: this.procDefKey, latest: true }
+    queryParams.start = 0
+    queryParams.size = 1000
     this.$flowableClient.processDefinitions
-      .getProcessDefinitions({ key: this.procDefKey, latest: true })
+      .getProcessDefinitions(queryParams)
       .then(result => {
         console.table(result.data.data)
         this.procDef = result.data.data[0]
@@ -100,10 +103,11 @@ export default {
   },
   methods: {
     listProcesses () {
+      let queryParams = { key: this.procDefKey, latest: true }
+      queryParams.start = 0 //(this.currentPage - 1) * this.pageSize
+      queryParams.size = 1000// this.pageSize
       this.$flowableClient.processInstances
-        .getProcessInstances({
-          processDefinitionKey: this.procDefKey
-        })
+        .getProcessInstances(queryParams)
         .then(result => {
           this.list = result.data.data
           this.currentPage = 1

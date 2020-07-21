@@ -2,7 +2,8 @@
   <el-container class="main">
     <el-header class="header">
       <div class="logo"></div>
-      <span class="header-btn" @click="hiddenSidebar">
+      <span class="header-btn"
+            @click="hiddenSidebar">
         <i class="el-icon-menu"></i>
       </span>
 
@@ -12,37 +13,35 @@
             <i class="el-icon-bell"></i>
           </el-badge>
         </span>
-        <el-dropdown trigger="hover" @command="handleCommand">
+        <el-dropdown trigger="hover"
+                     @command="handleCommand">
           <span class="header-btn">
             {{ user.firstName
             }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              ><i class="el-icon-arrow-down" style="padding-right: 8px"></i
-              >个人信息</el-dropdown-item
-            >
-            <el-dropdown-item command="logout"
-              ><i class="el-icon-arrow-down" style="padding-right: 8px"></i
-              >退出</el-dropdown-item
-            >
+            <el-dropdown-item><i class="el-icon-arrow-down"
+                 style="padding-right: 8px"></i>个人信息</el-dropdown-item>
+            <el-dropdown-item command="logout"><i class="el-icon-arrow-down"
+                 style="padding-right: 8px"></i>退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
     </el-header>
     <el-container class="app">
-      <el-aside class="aside" width="230px">
-        <el-menu class="menu" router :collapse="collapsed">
+      <el-aside class="aside"
+                width="230px">
+        <el-menu class="menu"
+                 router
+                 :collapse="collapsed">
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-eleme" />
               流程定义
             </template>
-            <el-menu-item
-              v-for="defItem in procDefs"
-              :key="defItem.id"
-              :index="'/processes/' + defItem.key"
-              >{{ defItem.name }}
+            <el-menu-item v-for="defItem in procDefs"
+                          :key="defItem.id"
+                          :index="'/processes/' + defItem.key">{{ defItem.name + "(v"+defItem.version+")" }}
             </el-menu-item>
           </el-submenu>
           <el-submenu index="2">
@@ -78,7 +77,7 @@
 <script>
 export default {
   name: 'Home',
-  data() {
+  data () {
     return {
       collapsed: false,
       procDefs: [],
@@ -86,7 +85,7 @@ export default {
     }
   },
   computed: {},
-  mounted() {
+  mounted () {
     this.user = this.$flowable.getUser()
     this.$flowableClient.processDefinitions
       .getProcessDefinitions({ latest: true })
@@ -117,7 +116,7 @@ export default {
     //     })
     //     .catch()
     // },
-    handleCommand(command) {
+    handleCommand (command) {
       switch (command) {
         case 'logout':
           this.$flowable.logout()
@@ -125,7 +124,7 @@ export default {
           break
       }
     },
-    hiddenSidebar(e) {
+    hiddenSidebar (e) {
       e.preventDefault()
       document.body.classList.toggle('sidebar-close')
     }
@@ -133,5 +132,5 @@ export default {
 }
 </script>
 <style lang="scss">
-@import 'Home.scss';
+@import "Home.scss";
 </style>
