@@ -1,49 +1,58 @@
 <template>
   <el-tabs tab-position="left">
     <el-tab-pane label="任务详情">
-      <slot name='formDetails'> </slot>
+      <slot name="formDetails"> </slot>
       <form-data-view ref="formDataView" />
     </el-tab-pane>
 
     <el-tab-pane label="任务处理">
-      <taskFormTabComments :taskId="taskId"
-                           :processInstanceId="processInstanceId" />
+      <taskFormTabComments
+        :taskId="taskId"
+        :processInstanceId="processInstanceId"
+      />
 
       <el-card style="margin-top:10px">
         <div v-if="delegatePending === false">
           <el-row style="margin-bottom:10px">
-            <el-radio v-model="selectedAction"
-                      label="complete">提交</el-radio>
-            <el-radio v-model="selectedAction"
-                      label="reject">驳回</el-radio>
-            <activity-select ref="activitySelect"
-                             :taskId="taskId"
-                             :processInstanceId="processInstanceId"
-                             v-if="isRejectAction" />
+            <el-radio v-model="selectedAction" label="complete">提交</el-radio>
+            <el-radio v-model="selectedAction" label="reject">驳回</el-radio>
+            <activity-select
+              ref="activitySelect"
+              :taskId="taskId"
+              :processInstanceId="processInstanceId"
+              v-if="isRejectAction"
+            />
           </el-row>
 
           <el-row>
-            <el-checkbox v-if="isCompleteAction"
-                         v-model="selectUserForCompleteAction">指定处理人
+            <el-checkbox
+              v-if="isCompleteAction"
+              v-model="selectUserForCompleteAction"
+              >指定处理人
             </el-checkbox>
 
-            <user-select ref="userSelect"
-                         v-if="isCompleteAction && selectUserForCompleteAction" />
+            <user-select
+              ref="userSelect"
+              v-if="isCompleteAction && selectUserForCompleteAction"
+            />
           </el-row>
         </div>
 
-        <el-button type="primary"
-                   size="small"
-                   style="margin:10px auto;"
-                   @click="executeAction()">确认提交
+        <el-button
+          type="primary"
+          size="small"
+          style="margin:10px auto;"
+          @click="executeAction()"
+          >确认提交
         </el-button>
       </el-card>
-
     </el-tab-pane>
 
     <el-tab-pane label="流程图">
-      <processTransition v-if="processInstanceId"
-                         :processInstanceId="processInstanceId" />
+      <processTransition
+        v-if="processInstanceId"
+        :processInstanceId="processInstanceId"
+      />
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -56,77 +65,85 @@ import userSelect from './UserSelect'
 import activitySelect from './ActivitySelect'
 
 export default {
-  data () {
+  data() {
     return {
       metadata: { config: { size: '0' }, list: [] },
       delegatePending: false,
       selectedAction: 'complete',
       selectUserForCompleteAction: false,
       sendBackTo: {},
-      processInstanceId: ''
+      processInstanceId: '',
     }
   },
   props: {
     procDef: {
       type: Object,
-      default () {
+      default() {
         return {}
-      }
+      },
+    },
+    task: {
+      type: Object,
+      default() {
+        return {}
+      },
     },
     taskId: {
       type: String,
-      default: ''
+      default: '',
     },
     hideForm: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  mounted () {
+  mounted() {
     this.refreshView()
   },
   computed: {
-    isCompleteAction () {
+    isCompleteAction() {
       return this.selectedAction === 'complete'
     },
-    isRejectAction () {
+    isRejectAction() {
       return this.selectedAction === 'reject'
-    }
+    },
   },
   methods: {
-    refreshView () {
+    refreshView() {
+      debugger
       let _this = this
+      if (!_this.task.id) {
+        _this.$flowableClient.tasks.getTask(_this.taskId).then((response) => {
+          let task = response.data
+          _this.processInstanceId = task.processInstanceId
+          _this.delegatePending = task.delegationState === 'pending'
+        })
+      } else {
+        _this.processInstanceId = _this.task.processInstanceId
+        _this.delegatePending = _this.task.delegationState === 'pending'
+      }
 
-      this.$flowableClient.tasks.getTask(this.taskId).then(response => {
-        let task = response.data
-        this.processInstanceId = task.processInstanceId
-        this.delegatePending = task.delegationState === 'pending'
-      })
-
-      this.$flowableClient.tasks.getTaskForm(this.taskId).then(response => {
-        debugger
-
-        this.metadata = response.data
-        this.$refs.formDataView.setValues(this.procDef.key, this.metadata)
-      }).catch(e => {
-        debugger
-        console.log(e)
+      _this.$flowableClient.tasks.getTaskForm(_this.taskId).then((response) => {
+        _this.metadata = response.data
+        _this.$refs.formDataView.setValues(_this.procDef.key, _this.metadata)
       })
     },
-    executeAction () {
+    executeAction() {
       if (this.isRejectAction === true) {
-
         this.$flowableClient.processInstances.changeState(
           this.processInstanceId,
           {
             startActivityIds: this.$refs.activitySelect.startActivityIds,
-            cancelActivityIds: this.$refs.activitySelect.cancelActivityIds
+            cancelActivityIds: this.$refs.activitySelect.cancelActivityIds,
           }
         )
       } else {
         let targUser = null
 
-        if (this.isCompleteAction === true && this.selectUserForCompleteAction === true) {
+        if (
+          this.isCompleteAction === true &&
+          this.selectUserForCompleteAction === true
+        ) {
           targUser = this.$refs.userSelect.selected
         }
 
@@ -137,32 +154,33 @@ export default {
 
         this.$refs.formDataView
           .getValues()
-          .then(data => {
+          .then((data) => {
+            debugger
             let taskActionRequest = {
               action: targAction,
               assignee: targUser,
               variables: data.variables,
-              localScope: data.localScope
+              localScope: data.localScope,
             }
 
             this.$flowableClient.tasks
               .executeAction(this.taskId, taskActionRequest)
-              .then(response => {
+              .then((response) => {
                 console.debug(response)
               })
           })
-          .catch(e => {
+          .catch((e) => {
             console.error(e)
           })
       }
-    }
+    },
   },
   components: {
     formDataView,
     taskFormTabComments,
     processTransition,
     userSelect,
-    activitySelect
-  }
+    activitySelect,
+  },
 }
 </script>

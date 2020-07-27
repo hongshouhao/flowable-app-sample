@@ -15,7 +15,7 @@
     "form-making": "^1.2.7",
     "linq": "^3.2.1",
     "vue": "^2.6.10",
-    "vue-async-computed": "^3.7.0",
+    "vue-async-computed": "^3.8.2",
     "vue-lazyload": "^1.3.3",
     "vue-router": "^3.1.3",
     "vuex": "^3.1.1"

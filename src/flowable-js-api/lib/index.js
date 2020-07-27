@@ -2,6 +2,7 @@
 
 const ProcessDefinitionsResource = require('./process-definitions')
 const ProcessInstancesResource = require('./process-instances')
+const ProcessInstanceVariablesResource = require('./process-variables')
 const HistoricProcessInstancesResource = require('./process-history')
 
 const TasksResource = require('./tasks')
@@ -31,6 +32,7 @@ function flowable (options) {
   return {
     processDefinitions: new ProcessDefinitionsResource(options, httpClient),
     processInstances: new ProcessInstancesResource(options, httpClient),
+    processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
     historicprocessInstances: new HistoricProcessInstancesResource(options, httpClient),
 
     // processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),

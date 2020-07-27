@@ -1,8 +1,10 @@
-<template> </template>
+<template>
+  <div></div>
+</template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {}
   },
   props: {
@@ -12,11 +14,11 @@ export default {
     },
     data: {
       type: Array,
-      default: []
+      default () { return [] }
     }
   },
   watch: {
-    data() {
+    data () {
       debugger
       this.currentPage = 1
       this.handleCurrentChange()
@@ -24,7 +26,7 @@ export default {
   },
   components: {},
   methods: {
-    handleCurrentChange() {
+    handleCurrentChange () {
       var start = (this.currentPage - 1) * this.pageSize
       var end =
         this.currentPage * this.pageSize > this.data.length

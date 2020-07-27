@@ -3,4 +3,4 @@ import VueLazyload from 'vue-lazyload'
 
 Vue.use(VueLazyload, {
   attempt: 2
-})
+}) 

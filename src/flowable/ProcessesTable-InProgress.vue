@@ -1,62 +1,77 @@
-<template
-  >
+<template>
   <div>
     <slot name="processQuery"></slot>
-    <el-button icon="el-icon-plus"
-               type="primary"
-               size="mini"
-               :style="{ margin: '10px 5px' }"
-               @click="showStartForm">新增</el-button>
+    <el-button
+      icon="el-icon-plus"
+      type="primary"
+      size="mini"
+      :style="{ margin: '10px 5px' }"
+      @click="showStartForm"
+      >新增</el-button
+    >
     <el-table :data="listDisplaied">
-      <el-table-column type="index"
-                       width="80" />
-      <el-table-column label="流程名称"
-                       prop="processDefinitionName"
-                       width="250"
-                       align="center" />
-      <el-table-column label="发起人"
-                       prop="startUserId"
-                       align="center" />
-      <el-table-column label="开始时间"
-                       prop="startTime"
-                       width="180"
-                       align="center" />
-      <el-table-column label="状态"
-                       prop="status"
-                       width="180"
-                       align="center"
-                       :formatter="procStatusFormatter" />
-      <el-table-column fixed="right"
-                       label="操作"
-                       width="100">
+      <el-table-column type="index" width="80" />
+      <el-table-column
+        label="流程名称"
+        prop="processDefinitionName"
+        width="250"
+        align="center"
+      />
+      <el-table-column label="发起人" prop="startUserId" align="center" />
+      <el-table-column
+        label="开始时间"
+        prop="startTime"
+        width="180"
+        align="center"
+        :formatter="formatTime"
+      />
+      <el-table-column
+        label="状态"
+        prop="status"
+        width="180"
+        align="center"
+        :formatter="procStatusFormatter"
+      />
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
           <!-- <el-button @click="formDetails(scope.row)" type="text" size="small"
               >详情</el-button
             > -->
-          <el-button @click="showProcessDetails(scope.row)"
-                     type="text"
-                     size="small">审批进度</el-button>
+          <el-button
+            @click="showProcessDetails(scope.row)"
+            type="text"
+            size="small"
+            >审批进度</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background
-                   layout="total, prev, pager, next"
-                   :page-size="pageSize"
-                   :total="list.length"
-                   :current-page.sync="currentPage"
-                   @current-change="handleCurrentChange" />
+    <el-pagination
+      background
+      layout="total, prev, pager, next"
+      :page-size="pageSize"
+      :total="list.length"
+      :current-page.sync="currentPage"
+      @current-change="handleCurrentChange"
+    />
 
-    <el-dialog :visible.sync="startFormVisible"
-               :title="startFormTitle"
-               fullscreen>
-      <task-start-form ref="taskStartForm"
-                       v-if="startFormVisible"
-                       :procDef="procDef"
-                       @afterFormLoaded='startFormTitle = $event.name' />
+    <el-dialog
+      :visible.sync="startFormVisible"
+      :title="startFormTitle"
+      fullscreen
+    >
+      <task-start-form
+        ref="taskStartForm"
+        v-if="startFormVisible"
+        :procDef="procDef"
+        @afterFormLoaded="startFormTitle = $event.name"
+      />
     </el-dialog>
-    <el-dialog :visible.sync="procDetailDialogVisible"
-               :title="procDetailDialogTitle + ' - 流程信息'"
-               width="80%">
+    <el-dialog
+      :visible.sync="procDetailDialogVisible"
+      :title="procDetailDialogTitle + ' - 流程信息'"
+      width="80%"
+    >
       <processTransition :processInstanceId="processInstanceId" />
     </el-dialog>
   </div>
@@ -68,7 +83,7 @@ import processTransition from './ProcessTransition'
 
 export default {
   name: 'processes-table-inprogress',
-  data () {
+  data() {
     return {
       procDef: null,
       processInstanceId: null,
@@ -79,22 +94,22 @@ export default {
       startFormTitle: '',
       startFormVisible: false,
       procDetailDialogVisible: false,
-      procDetailDialogTitle: ''
+      procDetailDialogTitle: '',
     }
   },
   props: {
     procDefKey: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
-  mounted () {
+  mounted() {
     let queryParams = { key: this.procDefKey, latest: true }
     queryParams.start = 0
     queryParams.size = 1000
     this.$flowableClient.processDefinitions
       .getProcessDefinitions(queryParams)
-      .then(result => {
+      .then((result) => {
         console.table(result.data.data)
         this.procDef = result.data.data[0]
       })
@@ -102,25 +117,28 @@ export default {
     this.listProcesses()
   },
   methods: {
-    listProcesses () {
-      let queryParams = { key: this.procDefKey, latest: true }
+    listProcesses() {
+      debugger
+      let queryParams = { processDefinitionKey: this.procDefKey, latest: true }
       queryParams.start = 0 //(this.currentPage - 1) * this.pageSize
-      queryParams.size = 1000// this.pageSize
+      queryParams.size = 1000 // this.pageSize
+      queryParams.sort = 'startTime'
+      queryParams.order = 'desc'
       this.$flowableClient.processInstances
         .getProcessInstances(queryParams)
-        .then(result => {
+        .then((result) => {
           this.list = result.data.data
           this.currentPage = 1
           this.handleCurrentChange()
           console.table(this.list)
         })
     },
-    showProcessDetails (row) {
+    showProcessDetails(row) {
       this.procDetailDialogTitle = row.processDefinitionName
       this.processInstanceId = row.id
       this.procDetailDialogVisible = true
     },
-    handleCurrentChange () {
+    handleCurrentChange() {
       var start = (this.currentPage - 1) * this.pageSize
       var end =
         this.currentPage * this.pageSize > this.list.length
@@ -130,41 +148,44 @@ export default {
       this.listDisplaied = this.list.slice(start, end)
       console.table(this.listDisplaied)
     },
-    showStartForm () {
+    showStartForm() {
       if (this.procDef.startFormDefined) {
         this.startFormVisible = true
-      }
-      else {
+      } else {
         this.$confirm('是否新建流程?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         }).then(() => {
-          this.$flowableClient.processInstances.startProcessInstance({
-            processDefinitionId: this.procDef.id,
-            variables: [],
-            returnVariables: true
-          }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '新建成功!'
-            });
-          })
+          this.$flowableClient.processInstances
+            .startProcessInstance({
+              processDefinitionId: this.procDef.id,
+              variables: [],
+              returnVariables: true,
+            })
+            .then(() => {
+              this.$message({
+                type: 'success',
+                message: '新建成功!',
+              })
+            })
         })
       }
     },
-    procStatusFormatter (row) {
+    procStatusFormatter(row) {
       if (row.suspended) {
         return '挂起'
-      }
-      else {
+      } else {
         return row.assignee + '处理中'
       }
-    }
+    },
+    formatTime(row, column) {
+      return new Date(row.startTime).toDateString()
+    },
   },
   components: {
     taskStartForm,
-    processTransition
-  }
+    processTransition,
+  },
 }
 </script>

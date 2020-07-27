@@ -1,12 +1,10 @@
 <template>
   <el-tabs tab-position="left">
     <el-tab-pane label="流转中">
-      <processesInProgress v-if="procDefKey"
-                           :procDefKey="procDefKey" />
+      <processesInProgress v-if="procDefKey" :procDefKey="procDefKey" />
     </el-tab-pane>
     <el-tab-pane label="已归档">
-      <processesArchived v-if="procDefKey"
-                         :procDefKey="procDefKey" />
+      <processesArchived v-if="procDefKey" :procDefKey="procDefKey" />
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -15,17 +13,17 @@ import processesInProgress from './ProcessesTable-InProgress'
 import processesArchived from './ProcessesTable-Archived'
 
 export default {
-  data () {
+  data() {
     return {
-      procDefKey: null
+      procDefKey: null,
     }
   },
-  mounted () {
+  mounted() {
     this.procDefKey = this.$route.params.procDefKey
   },
   components: {
     processesInProgress,
-    processesArchived
-  }
+    processesArchived,
+  },
 }
 </script>

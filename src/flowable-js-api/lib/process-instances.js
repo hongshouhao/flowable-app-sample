@@ -185,6 +185,26 @@ function ProcessInstancesResource (options, http) {
       getRequestArgs()
     )
   }
+
+
+  /**
+ * add Multi-Instance Execution 
+ * @param processInstanceId
+ * @param injectActivityRequest
+   * @example {
+        "activityId": "string",
+        "variables": "[]",
+        @example{
+          "name" : "string",
+          "type" : "string",
+          "value" : "object",
+        }
+      }
+ * @returns {AxiosPromise<any> | *}
+ */
+  this.addMultiInstanceExecution = (processInstanceId, addMultiInstanceExecutionRequest) => {
+    return http.post(resourcePath + `/${processInstanceId}/multi-instance`, addMultiInstanceExecutionRequest)
+  }
 }
 
 /// ////////////////

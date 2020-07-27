@@ -18,13 +18,19 @@ const flowable = new Flowable('http://localhost:8068')
 Vue.prototype.$flowable = flowable;
 Vue.prototype.$flowableClient = flowable.api;
 
+import TaskHandler from './processes/taskHandler'
+Vue.prototype.$taskHandler = new TaskHandler();
+
+
 import asyncComputed from 'vue-async-computed'
 Vue.use(asyncComputed)
 
 Vue.config.productionTip = false
 
-new Vue({
+let vue = new Vue({
   router,
   store,
   render: h => h(App),
 }).$mount('#app')
+
+export default vue
