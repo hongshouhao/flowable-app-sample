@@ -1,10 +1,10 @@
 'use strict'
 
 const flowableAPI = require('./lib/index')({
-  apiUri: 'http://localhost:8080',
+  apiUri: 'http://192.168.72.10:8068',
   auth: {
     username: 'admin',
-    password: 'test'
+    password: 'admin'
   }
 })
 

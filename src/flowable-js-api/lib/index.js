@@ -25,9 +25,9 @@ function flowable (options) {
     baseURL: getBaseUrlWithCredentials(options) + flowableRestEndpoint,
     originBaseURL: options.apiUri + flowableRestEndpoint,
     timeout: options.timeout || 0,
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json' , 'authorization':'Basic YWRtaW46YWRtaW4='},
     withCredentials: false,
-    auth: options.auth
+    //auth: options.auth
   })
 
   return {

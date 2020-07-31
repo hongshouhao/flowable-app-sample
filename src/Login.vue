@@ -52,7 +52,7 @@ export default {
       if (!(this.username && this.password)) {
         return
       }
-
+debugger
       this.loading = true
       this.$flowable
         .login(this.username, this.password)

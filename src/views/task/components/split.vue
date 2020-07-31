@@ -1,0 +1,74 @@
+<template>
+  <div style="padding:10px">
+    <el-button
+      type="primary"
+      icon="el-icon-plus"
+      plain
+      style="margin:0 10px 10px 10px"
+      @click="taskVisible=true"
+    >添加子任务</el-button>
+    <el-popconfirm
+      confirmButtonText="确定"
+      cancelButtonText="取消"
+      icon="el-icon-info"
+      @onConfirm="splitComplete"
+      iconColor="orange"
+      title="完成拆分后将无法再添加子任务，是否确认完成？"
+    >
+      <el-button slot="reference" type="success" icon="el-icon-success" plain>完成拆分</el-button>
+    </el-popconfirm>
+    <el-collapse>
+      <el-collapse-item :name="index" v-for="(item,index) in tasks" :key="index">
+        <template slot="title">
+          <i class="header-icon el-icon-collection"></i>&nbsp;&nbsp;
+          任务{{index+1}}
+        </template>
+        <task-item :data="item"></task-item>
+      </el-collapse-item>
+    </el-collapse>
+
+    <el-dialog
+      title="添加子任务"
+      :visible.sync="taskVisible"
+      :modal="false"
+      :close-on-click-modal="false"
+    >
+      <add-task @on-success="reload()"></add-task>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { getTasks } from "@/api/task";
+import AddTask from "./add";
+import TaskItem from "./item";
+export default {
+  components: { AddTask, TaskItem },
+  data() {
+    return {
+      tasks: [],
+      taskVisible: false,
+    };
+  },
+  mounted() {
+    this.reload();
+  },
+  methods: {
+    async reload() {
+      this.taskVisible = false;
+      let response = null;
+      let params = {
+        adviceID: this.$route.query.id,
+      };
+      response = await getTasks(params);
+      this.tasks = response.data;
+    },
+    splitComplete() {
+      this.$emit("on-success");
+    },
+  },
+};
+</script>
+
+<style>
+</style>

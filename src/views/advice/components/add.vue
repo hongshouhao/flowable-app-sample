@@ -1,0 +1,223 @@
+<template>
+  <div>
+    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+      <el-form-item label="编号" prop="code">
+        <el-input v-model="formData.code" placeholder="请输入编号" readonly :style="{width: '100%'}">
+          <el-button slot="append" @click="gen">生成</el-button>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="提出单位" prop="tcdw">
+        <el-input v-model="formData.tcdw" placeholder="请输入提出单位" clearable :style="{width: '100%'}"></el-input>
+      </el-form-item>
+      <el-form-item label="联系人" prop="lxr">
+        <el-input v-model="formData.lxr" placeholder="请输入联系人" clearable :style="{width: '100%'}"></el-input>
+      </el-form-item>
+      <el-form-item label="联系方式" prop="lxfs">
+        <el-input v-model="formData.lxfs" placeholder="请输入联系方式" clearable :style="{width: '100%'}"></el-input>
+      </el-form-item>
+      <el-form-item label="来源" prop="ly">
+        <el-select v-model="formData.ly" placeholder="请选择来源" clearable :style="{width: '100%'}">
+          <el-option
+            v-for="(item, index) in lyOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="紧急程度" prop="jjcd">
+        <el-radio-group v-model="formData.jjcd" size="medium">
+          <el-radio
+            v-for="(item, index) in jjcdOptions"
+            :key="index"
+            :label="item.value"
+            :disabled="item.disabled"
+          >{{item.label}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="描述" prop="ms">
+        <el-input
+          v-model="formData.ms"
+          type="textarea"
+          placeholder="请输入描述"
+          :autosize="{minRows: 4, maxRows: 4}"
+          :style="{width: '100%'}"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="bz">
+        <el-input
+          v-model="formData.bz"
+          type="textarea"
+          placeholder="请输入备注"
+          :autosize="{minRows: 4, maxRows: 4}"
+          :style="{width: '100%'}"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="附件" prop="fujian">
+        <upload-view folder="chubufenxi"></upload-view>
+      </el-form-item>
+      <el-form-item size="large">
+        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button @click="resetForm">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+<script>
+import { guid } from "@/core/utils";
+import { getAdviceCode, addAdvice } from "@/api/advice";
+import UploadView from "../../components/uploadView";
+export default {
+  components: { UploadView },
+  props: [],
+  data() {
+    return {
+      formData: {
+        code: undefined,
+        tcdw: undefined,
+        lxr: undefined,
+        lxfs: undefined,
+        ly: undefined,
+        jjcd: undefined,
+        ms: undefined,
+        bz: undefined,
+        status: "初步分析中",
+      },
+      rules: {
+        code: [
+          {
+            required: true,
+          },
+        ],
+        tcdw: [
+          {
+            required: true,
+            message: "请输入提出单位",
+            trigger: "blur",
+          },
+        ],
+        lxr: [
+          {
+            required: true,
+            message: "请输入联系人",
+            trigger: "blur",
+          },
+        ],
+        lxfs: [
+          {
+            required: true,
+            message: "请输入联系方式",
+            trigger: "blur",
+          },
+        ],
+        ly: [
+          {
+            required: true,
+            message: "请选择来源",
+            trigger: "change",
+          },
+        ],
+        jjcd: [
+          {
+            required: true,
+            message: "紧急程度不能为空",
+            trigger: "change",
+          },
+        ],
+        ms: [
+          {
+            required: true,
+            message: "请输入描述",
+            trigger: "blur",
+          },
+        ],
+        bz: [],
+      },
+      lyOptions: [
+        {
+          label: "专员走访",
+          value: "专员走访",
+        },
+        {
+          label: "部门需求",
+          value: "部门需求",
+        },
+        {
+          label: "客服热线",
+          value: "客服热线",
+        },
+        {
+          label: "领导指派",
+          value: "领导指派",
+        },
+        {
+          label: "其他",
+          value: "其他",
+        },
+      ],
+      jjcdOptions: [
+        {
+          label: "一般",
+          value: "一般",
+        },
+        {
+          label: "紧急",
+          value: "紧急",
+        },
+        {
+          label: "非常紧急",
+          value: "非常紧急",
+        },
+      ],
+    };
+  },
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {},
+  methods: {
+    async gen() {
+      const { data } = await getAdviceCode();
+      this.formData.code =
+        "YHTS" + "-" + new Date().getFullYear() + "-" + data[0].code;
+    },
+    guid() {
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
+        c
+      ) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    },
+    submitForm() {
+      this.$refs["elForm"].validate((valid) => {
+        if (!valid) return;
+        // TODO 提交表单
+        this.addAdvice();
+      });
+    },
+    async addAdvice() {
+      this.formData.creator = "总集";
+      this.formData.adviceID = this.guid();
+      let response = null;
+      response = await addAdvice(this.formData);
+      if (response.code == 200) {
+        this.$emit("on-success");
+        this.$message.success("创建成功！");
+      } else {
+        this.$message.error("保存失败，请重新检查。");
+      }
+    },
+    resetForm() {
+      this.$refs["elForm"].resetFields();
+    },
+  },
+};
+</script>
+<style>
+.el-upload__tip {
+  line-height: 1.2;
+}
+</style>
