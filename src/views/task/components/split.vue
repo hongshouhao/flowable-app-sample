@@ -17,16 +17,9 @@
     >
       <el-button slot="reference" type="success" icon="el-icon-success" plain>完成拆分</el-button>
     </el-popconfirm>
-    <el-collapse>
-      <el-collapse-item :name="index" v-for="(item,index) in tasks" :key="index">
-        <template slot="title">
-          <i class="header-icon el-icon-collection"></i>&nbsp;&nbsp;
-          任务{{index+1}}
-        </template>
-        <task-item :data="item"></task-item>
-      </el-collapse-item>
-    </el-collapse>
-
+    <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
+      <task-item :data="item"></task-item>
+    </el-card>
     <el-dialog
       title="添加子任务"
       :visible.sync="taskVisible"

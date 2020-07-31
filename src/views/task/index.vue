@@ -18,9 +18,13 @@
       </el-form>
     </div>
 
-    <el-table :data="tableData" style="width: 100%" border @row-click="rowClick">
+    <el-table :data="tableData" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="50"></el-table-column>
-      <el-table-column prop="rwnr" label="任务内容"></el-table-column>
+      <el-table-column prop="rwnr" label="任务内容" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-link type="primary" @click="rowClick(scope.row)">{{scope.row.rwnr}}</el-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="groupName" label="解决单位" width="120"></el-table-column>
       <el-table-column prop="ifHtn" label="是否合同内" width="90">
         <template slot-scope="scope">{{scope.row.ifHtn?"是":"否"}}</template>

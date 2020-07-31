@@ -28,7 +28,13 @@
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" @on-success="init()"></add-analysis>
     </el-drawer>
-    <el-drawer title="任务拆分" :visible.sync="rwcfVisible" size="450px" :wrapperClosable="false">
+    <el-drawer
+      title="任务拆分"
+      :visible.sync="rwcfVisible"
+      size="450px"
+      :wrapperClosable="false"
+      @close="init"
+    >
       <split-task v-if="rwcfVisible" @on-success="init()"></split-task>
     </el-drawer>
     <el-dialog title="审核意见" :visible.sync="reviewVisible">
