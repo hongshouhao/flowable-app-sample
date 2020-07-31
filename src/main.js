@@ -8,13 +8,16 @@ import store from './store'
 import axios from 'axios'
 Vue.prototype.$http = axios;
 
+import "@/core/utils/prototype";
+import * as filters from "./core/filters";
+import "@/core/";
 import './plugins/element'
 import './plugins/formmaking'
 import './plugins/viewer'
 import './plugins/linq'
 
 import Flowable from './plugins/flowable'
-const flowable = new Flowable('http://localhost:8068')
+const flowable = new Flowable('http://192.168.72.10:8068')
 Vue.prototype.$flowable = flowable;
 Vue.prototype.$flowableClient = flowable.api;
 
@@ -24,6 +27,10 @@ Vue.prototype.$taskHandler = new TaskHandler();
 
 import asyncComputed from 'vue-async-computed'
 Vue.use(asyncComputed)
+
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]);
+});
 
 Vue.config.productionTip = false
 
