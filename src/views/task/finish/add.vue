@@ -74,7 +74,7 @@ export default {
       return isRightSize;
     },
     async addFinish() {
-      this.formData.taskid = this.$route.query.id;
+      this.formData.taskid = this.$route.query.taskID;
       this.formData.creator = "项目组";
       let response = await addFinish(this.formData);
       if (response.status === 1) {

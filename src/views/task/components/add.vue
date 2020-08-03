@@ -80,6 +80,7 @@
   </div>
 </template>
 <script>
+import { guid } from "@/core/utils";
 import { addTask } from "@/api/task";
 import { getProGroupList } from "@/api/projectGroup";
 export default {
@@ -88,7 +89,7 @@ export default {
     return {
       formData: {
         jjdw: undefined,
-        ifHtn: false,
+        ifHtn: true,
         ifDsf: false,
         jjcd: undefined,
         qwwcsj: null,
@@ -177,9 +178,9 @@ export default {
       }
     },
     async addTask () {
-      this.formData.adviceId = this.$route.query.id;
+      this.formData.adviceId = this.$route.query.adviceID;
       this.formData.creator = "总集";
-      debugger
+      this.formData.taskID = guid();
       let response = await addTask(this.formData);
       if (response.status === 1) {
 
@@ -196,9 +197,11 @@ export default {
         this.$message.error("保存失败，请检查网络");
       }
     },
+
+    //添加flowable任务 多实例
     async addFlowableTask () {
       let addMultiInstanceExecutionRequest = {
-        activityId: 'sid-937AC944-600C-4ACB-BEB1-3D0470A89DD0',
+        activityId: 'subprocess-renwushenhe',
         variables: [{
           name: "adviceid",
           type: "String",
@@ -206,13 +209,15 @@ export default {
         }, {
           name: "taskid",
           type: "String",
-          value: this.formData.adviceId, //TODO
+          value: this.formData.taskID, //TODO
         }],
       }
+      debugger
       let _this = this
+      let processId = this.$store.state.currentProcessInstanceId
       return _this.$flowableClient.processInstances
         .addMultiInstanceExecution(
-          _this.flowableProcessId,
+          processId,
           addMultiInstanceExecutionRequest
         )
         .then((response) => {

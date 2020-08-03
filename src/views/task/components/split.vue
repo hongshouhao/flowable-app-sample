@@ -17,16 +17,9 @@
     >
       <el-button slot="reference" type="success" icon="el-icon-success" plain>完成拆分</el-button>
     </el-popconfirm>
-    <el-collapse>
-      <el-collapse-item :name="index" v-for="(item,index) in tasks" :key="index">
-        <template slot="title">
-          <i class="header-icon el-icon-collection"></i>&nbsp;&nbsp;
-          任务{{index+1}}
-        </template>
-        <task-item :data="item"></task-item>
-      </el-collapse-item>
-    </el-collapse>
-
+    <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
+      <task-item :data="item"></task-item>
+    </el-card>
     <el-dialog
       title="添加子任务"
       :visible.sync="taskVisible"
@@ -39,7 +32,7 @@
 </template>
 
 <script>
-import { getTasks } from "@/api/task";
+import { getTasksByAdvice } from "@/api/task";
 import AddTask from "./add";
 import TaskItem from "./item";
 export default {
@@ -58,9 +51,9 @@ export default {
       this.taskVisible = false;
       let response = null;
       let params = {
-        adviceID: this.$route.query.id,
+        adviceID: this.$route.query.adviceID,
       };
-      response = await getTasks(params);
+      response = await getTasksByAdvice(params);
       this.tasks = response.data;
     },
     splitComplete() {

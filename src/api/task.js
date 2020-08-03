@@ -16,9 +16,9 @@ export function addTask(params) {
 }
 
 //获取建议中的任务
-export function getTasks(query) {
+export function getTasksByAdvice(query) {
     return get({
-        url: `${services.do.query}getTasks`,
+        url: `${services.do.query}getTasksByAdvice`,
         params: query
     });
 }

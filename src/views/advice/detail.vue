@@ -33,15 +33,18 @@
     <div class="btn-group"
          v-show="btnGrpVisible">
       <el-button type="primary"
+                 v-show='btnCbfxVisible'
                  plain
                  @click="cbfxVisible=true">提交初步分析</el-button>
       <el-button type="primary"
+                 v-show='btnRwcfVisible'
                  plain
                  @click="rwcfVisible=true">任务拆分</el-button>
       <el-button type="primary"
                  plain
                  @click="submitSecondReview">提交复核</el-button>
       <el-button type="primary"
+                 v-show='btnHedingVisible'
                  plain
                  @click="submitRst(2)">核定</el-button>
       <el-button type="primary"
@@ -53,7 +56,7 @@
                size="450px"
                :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible"
-                    :flowableTaskId='flowableTask.id'
+                    :flowableTaskId='flowableTaskId'
                     @on-success="init()"></add-analysis>
     </el-drawer>
     <el-drawer title="任务拆分"
@@ -61,7 +64,6 @@
                size="450px"
                :wrapperClosable="false">
       <split-task v-if="rwcfVisible"
-                  :flowableProcessId='flowableTask.processInstanceId'
                   @on-success="init()"></split-task>
     </el-drawer>
     <el-dialog title="审核意见"
@@ -70,14 +72,14 @@
                     @on-success="init()"
                     :data="submitReviewData"></first-review>
       <second-review v-if="!first"
-                     :flowableTaskId='flowableTask.id'
+                     :flowableTaskId='flowableTaskId'
                      @on-success="init()"></second-review>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getTasks } from "@/api/task";
+import { getTasksByAdvice } from "@/api/task";
 import { getAdviceById, getAnalysis } from "@/api/advice";
 import { getReview } from "@/api/review";
 import InfoView from "./components/info";
@@ -115,8 +117,17 @@ export default {
       analysisInfo: {},
       reviewInfo: {},
       btnGrpVisible: false,
+      btnCbfxVisible: false,
+      btnRwcfVisible: false,
+      btnReviewVisible: false,
+      btnHedingVisible: false,
       flowableTask: {}
     };
+  },
+  computed: {
+    flowableTaskId () {
+      return this.flowableTask.id
+    }
   },
   mounted () {
     this.getMyTask()
@@ -127,16 +138,47 @@ export default {
       this.cbfxVisible = false;
       this.reviewVisible = false;
       this.rwcfVisible = false;
-      this.getTasks();
+      this.getTasksByAdvice();
       this.getAdviceById();
       this.getAnalysis();
       this.getReview();
     },
 
+    //获取建议中的所有任务
+    async getTasksByAdvice () {
+      let response = null;
+      let params = {
+        adviceID: this.$route.query.adviceID,
+      };
+      response = await getTasksByAdvice(params);
+      if (response.status === 1) {
+        if (response.data.length > 0) this.tasks = response.data;
+      } else this.$message.error("查询失败，请检查网络！");
+    },
+
+    //获取建议信息
+    async getAdviceById () {
+      let response = await getAdviceById({ id: this.$route.query.adviceID });
+      if (response.status === 1) {
+        if (response.data.length > 0) this.adviceInfo = response.data[0];
+      } else this.$message.error("查询失败，请检查网络！");
+    },
+
+    //获取初步分析
+    async getAnalysis () {
+      let params = {
+        adviceid: this.$route.query.adviceID,
+      };
+      let response = await getAnalysis(params);
+      if (response.status === 1) {
+        if (response.data.length > 0) this.analysisInfo = response.data[0];
+      } else this.$message.error("查询失败，请检查网络！");
+    },
+
     //获取复审信息
     async getReview () {
       let params = {
-        adviceid: this.$route.query.id,
+        adviceid: this.$route.query.adviceID,
         type: "领导复审",
       };
       let response = await getReview(params);
@@ -145,32 +187,13 @@ export default {
       } else this.$message.error("查询失败，请检查网络！");
     },
 
-    //获取建议信息
-    async getAdviceById () {
-      let response = await getAdviceById({ id: this.$route.query.id });
-      if (response.status === 1) {
-        if (response.data.length > 0) this.adviceInfo = response.data[0];
-      } else this.$message.error("查询失败，请检查网络！");
-    },
-
     //获取建议中的所有任务
     async getTasks () {
       let response = null;
       let params = {
-        adviceID: this.$route.query.id,
+        adviceid: this.$route.query.adviceID,
       };
-      response = await getTasks(params);
-      if (response.status === 1) {
-        if (response.data.length > 0) this.tasks = response.data;
-      } else this.$message.error("查询失败，请检查网络！");
-    },
-
-    //获取初步分析
-    async getAnalysis () {
-      let params = {
-        adviceid: this.$route.query.id,
-      };
-      let response = await getAnalysis(params);
+      response = await getAnalysis(params);
       if (response.status === 1) {
         if (response.data.length > 0) this.analysisInfo = response.data[0];
       } else this.$message.error("查询失败，请检查网络！");
@@ -195,35 +218,48 @@ export default {
     },
 
     getMyTask () {
+      let _this = this
+
       let username = this.$flowableClient.options.auth.username
       this.$flowableClient.tasks
         .queryTasks({
           candidateOrAssigned: username,
-          processInstanceBusinessKey: this.$route.query.id,
+          processInstanceBusinessKey: this.$route.query.adviceID,
           includeTaskLocalVariables: true,
           includeProcessVariables: true,
         })
         .then((tasks) => {
-          debugger
           let myTasks = tasks.data.data
           if (myTasks.length === 0) {
             this.btnGrpVisible = false
           }
           else {
-            this.flowableTask = myTasks.find(x => x.formKey === '');
+            this.flowableTask = myTasks.filter(x => x.formKey !== 'renwushenhe')[0]
+            debugger
+            this.$store.commit('currentProcessInstanceId', _this.flowableTask.processInstanceId)
+
             this.btnGrpVisible = true
             if (this.flowableTask) {
               this.submitReviewData.flowableTaskId = this.flowableTask.id
               //根据节点设置按钮
-              if (this.flowableTask.formKey === 'a') {
-                this.cbfxVisible = true
-                this.reviewVisible = false;
-                this.rwcfVisible = false;
+              debugger
+              if (this.flowableTask.formKey === 'xiangmuxuqiu') {
+                this.btnCbfxVisible = true
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = false;
+                this.btnHedingVisible = false;
               }
-              else if (this.flowableTask.formKey === 'b') {
-                this.cbfxVisible = true
-                this.reviewVisible = false;
-                this.rwcfVisible = false;
+              else if (this.flowableTask.formKey === 'renwuchaifen') {
+                this.btnCbfxVisible = false
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = true;
+                this.btnHedingVisible = false;
+              }
+              else if (this.flowableTask.formKey === 'xiangmulixiangshenhe') {
+                this.btnCbfxVisible = false
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = false;
+                this.btnHedingVisible = true;
               }
             }
           }

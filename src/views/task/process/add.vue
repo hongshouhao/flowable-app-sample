@@ -78,7 +78,7 @@ export default {
       this.$refs["elForm"].resetFields();
     },
     async addProcess() {
-      this.formData.taskid = this.$route.query.id;
+      this.formData.taskid = this.$route.query.taskID;
       this.formData.creator = "项目组";
       let response = await addProcess(this.formData);
       if (response.status === 1) {

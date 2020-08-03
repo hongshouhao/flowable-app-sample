@@ -1,19 +1,18 @@
 <template>
-  <el-row>
-    <el-divider content-position="left">任务信息</el-divider>
-    <el-col :span="6">解决单位：{{data.jjdwName}}</el-col>
-    <el-col :span="6">
+  <div class="list">
+    <div class="item">解决单位：{{data.jjdwName}}</div>
+    <div class="item">
       是否合同内：
       <el-switch v-model="data.ifHtn" disabled active-color="#13ce66" inactive-color="#ff4949"></el-switch>
       {{data.ifHtn?"是":"否"}}
-    </el-col>
-    <el-col :span="6">
+    </div>
+    <div class="item">
       紧急程度：
       <el-tag :type="type">{{data.jjcd}}</el-tag>
-    </el-col>
-    <el-col :span="6" v-if="data.qwwcsj">期望完成时间：{{data.qwwcsj.parseTime("yyyy-MM-dd")}}</el-col>
-    <el-col :span="24">任务内容：{{data.rwnr}}</el-col>
-  </el-row>
+    </div>
+    <div class="item" v-if="data.qwwcsj">期望完成时间：{{data.qwwcsj.parseTime("yyyy-MM-dd")}}</div>
+    <div>任务内容：{{data.rwnr}}</div>
+  </div>
 </template>
 
 <script>
@@ -40,5 +39,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.list {
+  width: 100%;
+  font-size: 13px;
+  .item {
+    float: left;
+    width: 25%;
+    height: 25px;
+    min-width: 390px;
+    line-height: 25px;
+  }
+}
 </style>

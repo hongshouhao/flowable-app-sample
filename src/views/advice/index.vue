@@ -25,9 +25,13 @@
       </el-form>
     </div>
 
-    <el-table :data="tableData" style="width: 100%" border @row-click="rowClick">
+    <el-table :data="tableData" style="width: 100%" border stripe>
       <el-table-column type="index" label="序号" width="50"></el-table-column>
-      <el-table-column prop="code" label="编号" width="120"></el-table-column>
+      <el-table-column prop="code" label="编号" width="130">
+        <template slot-scope="scope">
+          <el-link type="primary" @click="rowClick(scope.row)">{{scope.row.code}}</el-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="tcdw" label="提出单位" width="180"></el-table-column>
       <el-table-column prop="ms" label="描述"></el-table-column>
       <el-table-column prop="jjcd" label="紧急程度" width="120"></el-table-column>
@@ -92,7 +96,7 @@ export default {
     rowClick(row) {
       this.$router.push({
         path: "/advice/detail",
-        query: { id: row.adviceID },
+        query: { adviceID: row.adviceID },
       });
     },
     exportExcel() {},

@@ -41,4 +41,9 @@ body,
     padding: 20px 0;
   }
 }
+span:focus,
+div:focus,
+button:focus {
+  outline: 0;
+}
 </style>
