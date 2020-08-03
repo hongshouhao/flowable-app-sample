@@ -1,6 +1,7 @@
 <template>
   <el-container class="main">
-    <el-aside width="200px" class="aside">
+    <el-aside width="200px"
+              class="aside">
       <user-info></user-info>
       <menu-view></menu-view>
     </el-aside>
@@ -22,12 +23,20 @@ import MenuView from "./menu";
 import UserInfo from "./userInfo";
 export default {
   components: { MenuView, UserInfo },
-  data() {
+  data () {
     return {
       user: {},
       SysName: "苏州工业园区“一网通办”优化提升服务平台",
     };
   },
+  mounted () {
+    this.$flowableClient.processDefinitions
+      .getProcessDefinitions({ latest: true })
+      .then(result => {
+        console.table(result.data.data)
+        this.$store.commit('processDefinitions', result.data.data)
+      })
+  }
 };
 </script>
 <style lang="scss" scoped>
