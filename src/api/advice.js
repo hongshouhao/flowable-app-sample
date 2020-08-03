@@ -46,9 +46,9 @@ export function addAnalysis(query) {
 }
 
 //获取初步分析
-export function getAnalysis(query) {
+export function getAnalysisByAdvice(query) {
   return get({
-    url: `${services.do.query}getAnalysis`,
+    url: `${services.do.query}getAnalysisByAdvice`,
     params: query
   });
 }

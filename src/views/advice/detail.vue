@@ -46,7 +46,7 @@
 
 <script>
 import { getTasksByAdvice } from "@/api/task";
-import { getAdviceById, getAnalysis } from "@/api/advice";
+import { getAdviceById, getAnalysisByAdvice } from "@/api/advice";
 import { getReview } from "@/api/review";
 import InfoView from "./components/info";
 import AddAnalysis from "./analysis/add";
@@ -94,7 +94,7 @@ export default {
       this.rwcfVisible = false;
       this.getTasksByAdvice();
       this.getAdviceById();
-      this.getAnalysis();
+      this.getAnalysisByAdvice();
       this.getReview();
     },
 
@@ -119,11 +119,11 @@ export default {
     },
 
     //获取初步分析
-    async getAnalysis() {
+    async getAnalysisByAdvice() {
       let params = {
         adviceid: this.$route.query.adviceID,
       };
-      let response = await getAnalysis(params);
+      let response = await getAnalysisByAdvice(params);
       if (response.status === 1) {
         if (response.data.length > 0) this.analysisInfo = response.data[0];
       } else this.$message.error("查询失败，请检查网络！");
