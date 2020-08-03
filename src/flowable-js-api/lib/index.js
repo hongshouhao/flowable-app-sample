@@ -9,6 +9,7 @@ const TasksResource = require('./tasks')
 const TaskVariablesResource = require('./task-variables')
 const TaskIdentityLinksResource = require('./task-identityLinks')
 const TaskCommentsResource = require('./task-comments')
+const HistoricPTaskInstancesResource = require('./task-history')
 
 const IdentityUserResource = require('./identity-users')
 const HistoricResource = require('./history')
@@ -40,8 +41,9 @@ function flowable (options) {
     taskVariables: new TaskVariablesResource(options, httpClient),
     taskIdentityLinks: new TaskIdentityLinksResource(options, httpClient),
     taskComments: new TaskCommentsResource(options, httpClient),
-    identityUsers: new IdentityUserResource(options, httpClient),
+    historicTaskInstances: new HistoricPTaskInstancesResource(options, httpClient),
 
+    identityUsers: new IdentityUserResource(options, httpClient),
     forms: new FormsResource(options, httpClient),
     histories: new HistoricResource(options, httpClient),
     options: options

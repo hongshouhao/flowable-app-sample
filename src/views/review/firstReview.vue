@@ -1,36 +1,39 @@
 <template>
   <div>
-    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-      <el-form-item label="审核结果" prop="result">
-        <el-radio-group v-model="formData.result" size="medium">
-          <el-radio
-            v-for="(item, index) in field103Options"
-            :key="index"
-            :label="item.value"
-            :disabled="item.disabled"
-          >{{item.label}}</el-radio>
+    <el-form ref="elForm"
+             :model="formData"
+             :rules="rules"
+             size="medium"
+             label-width="100px">
+      <el-form-item label="审核结果"
+                    prop="result">
+        <el-radio-group v-model="formData.result"
+                        size="medium">
+          <el-radio v-for="(item, index) in field103Options"
+                    :key="index"
+                    :label="item.value"
+                    :disabled="item.disabled">{{item.label}}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="审核意见" prop="opinion">
-        <el-input
-          v-model="formData.opinion"
-          type="textarea"
-          placeholder="请输入审核意见"
-          :autosize="{minRows: 4, maxRows: 4}"
-          :style="{width: '100%'}"
-        ></el-input>
+      <el-form-item label="审核意见"
+                    prop="opinion">
+        <el-input v-model="formData.opinion"
+                  type="textarea"
+                  placeholder="请输入审核意见"
+                  :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
       </el-form-item>
-      <el-form-item label="备注" prop="bz">
-        <el-input
-          v-model="formData.bz"
-          type="textarea"
-          placeholder="请输入备注"
-          :autosize="{minRows: 4, maxRows: 4}"
-          :style="{width: '100%'}"
-        ></el-input>
+      <el-form-item label="备注"
+                    prop="bz">
+        <el-input v-model="formData.bz"
+                  type="textarea"
+                  placeholder="请输入备注"
+                  :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="primary"
+                   @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -41,7 +44,16 @@ import { submitReview } from "@/api/review";
 export default {
   components: {},
   props: ["data"],
-  data() {
+  // props: {
+  //   "data",
+  //   flowableTaskId: {
+  //     type: String,
+  //     default () {
+  //       return ''
+  //     },
+  //   }
+  // },
+  data () {
     return {
       formData: {
         result: undefined,
@@ -79,24 +91,24 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
-  mounted() {},
+  created () { },
+  mounted () { },
   methods: {
-    submitForm() {
+    submitForm () {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
         this.submitReview();
       });
     },
-    resetForm() {
+    resetForm () {
       this.$refs["elForm"].resetFields();
     },
-    async submitReview() {
+    async submitReview () {
       let response = null;
       let params = {
         adviceID: this.$route.query.adviceID,
-        taskID: this.data.taskID,
+        taskID: this.data.data.taskID,
         type: "领导初审",
         result: this.formData.result,
         opinion: this.formData.opinion,
@@ -105,11 +117,40 @@ export default {
       };
       response = await submitReview(params);
       if (response.status === 1) {
-        this.$emit("on-success");
-        this.$message.success("保存成功！");
+        let execSuccess = await this.excuFlowableTask();
+        if (execSuccess === 1) {
+          this.$emit("on-success");
+          this.$message.success("保存成功！");
+        }
+        else {
+          this.$message.success("任务提交失败");
+        }
       } else {
         this.$message.error("保存失败，请检查网络");
       }
+    },
+    async  excuFlowableTask () {
+      let taskActionRequest = {
+        action: 'complete',
+        variables: [
+          {
+            name: "adviceid",
+            type: "String",
+            value: this.$route.query.id,
+          }, {
+            name: "taskid",
+            type: "String",
+            value: this.data.data.taskID,
+          }
+        ],
+        localScope: true
+      }
+
+      await this.$flowableClient.tasks.executeAction(
+        this.data.flowableTaskId,
+        taskActionRequest
+      ).then(resp => 1)
+        .catch(err => 0)
     },
   },
 };

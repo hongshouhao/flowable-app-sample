@@ -18,28 +18,22 @@
         <second-info :data="reviewInfo"></second-info>
       </el-collapse-item>
     </el-collapse>
-    <div class="btn-group">
-      <el-button type="primary" plain @click="cbfxVisible=true">提交初步分析</el-button>
-      <el-button type="primary" plain @click="rwcfVisible=true">任务拆分</el-button>
+    <div class="btn-group" v-show="btnGrpVisible">
+      <el-button type="primary" v-show="btnCbfxVisible" plain @click="cbfxVisible=true">提交初步分析</el-button>
+      <el-button type="primary" v-show="btnRwcfVisible" plain @click="rwcfVisible=true">任务拆分</el-button>
       <el-button type="primary" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" plain @click="submitRst(2)">核定</el-button>
+      <el-button type="primary" v-show="btnHedingVisible" plain @click="submitRst(2)">核定</el-button>
       <el-button type="primary" plain @click="submitSecondReview">提交指派</el-button>
     </div>
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
-      <add-analysis v-if="cbfxVisible" @on-success="init()"></add-analysis>
+      <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
     </el-drawer>
-    <el-drawer
-      title="任务拆分"
-      :visible.sync="rwcfVisible"
-      size="450px"
-      :wrapperClosable="false"
-      @close="init"
-    >
+    <el-drawer title="任务拆分" :visible.sync="rwcfVisible" size="450px" :wrapperClosable="false">
       <split-task v-if="rwcfVisible" @on-success="init()"></split-task>
     </el-drawer>
     <el-dialog title="审核意见" :visible.sync="reviewVisible">
       <first-review v-if="first" @on-success="init()" :data="submitReviewData"></first-review>
-      <second-review v-if="!first" @on-success="init()"></second-review>
+      <second-review v-if="!first" :flowableTaskId="flowableTaskId" @on-success="init()"></second-review>
     </el-dialog>
   </div>
 </template>
@@ -82,9 +76,21 @@ export default {
       adviceInfo: {},
       analysisInfo: {},
       reviewInfo: {},
+      btnGrpVisible: false,
+      btnCbfxVisible: false,
+      btnRwcfVisible: false,
+      btnReviewVisible: false,
+      btnHedingVisible: false,
+      flowableTask: {},
     };
   },
+  computed: {
+    flowableTaskId() {
+      return this.flowableTask.id;
+    },
+  },
   mounted() {
+    this.getMyTask();
     this.init();
   },
   methods: {
@@ -141,9 +147,21 @@ export default {
       } else this.$message.error("查询失败，请检查网络！");
     },
 
+    //获取建议中的所有任务
+    async getTasks() {
+      let response = null;
+      let params = {
+        adviceid: this.$route.query.adviceID,
+      };
+      response = await getTasksByAdvice(params);
+      if (response.status === 1) {
+        if (response.data.length > 0) this.analysisInfo = response.data[0];
+      } else this.$message.error("查询失败，请检查网络！");
+    },
+
     //弹出审核对话框
     submitRst(type, data) {
-      this.submitReviewData = data;
+      this.submitReviewData.data = data;
       this.reviewVisible = true;
       if (type == 1) this.first = true;
       else this.first = false;
@@ -157,6 +175,57 @@ export default {
     //完成拆分任务 --未写
     finishSplit() {
       this.$message.success("拆分完成");
+    },
+
+    getMyTask() {
+      let _this = this;
+
+      let username = this.$flowableClient.options.auth.username;
+      this.$flowableClient.tasks
+        .queryTasks({
+          candidateOrAssigned: username,
+          processInstanceBusinessKey: this.$route.query.adviceID,
+          includeTaskLocalVariables: true,
+          includeProcessVariables: true,
+        })
+        .then((tasks) => {
+          let myTasks = tasks.data.data;
+          if (myTasks.length === 0) {
+            this.btnGrpVisible = false;
+          } else {
+            this.flowableTask = myTasks.filter(
+              (x) => x.formKey !== "renwushenhe"
+            )[0];
+            debugger;
+            this.$store.commit(
+              "currentProcessInstanceId",
+              _this.flowableTask.processInstanceId
+            );
+
+            this.btnGrpVisible = true;
+            if (this.flowableTask) {
+              this.submitReviewData.flowableTaskId = this.flowableTask.id;
+              //根据节点设置按钮
+              debugger;
+              if (this.flowableTask.formKey === "xiangmuxuqiu") {
+                this.btnCbfxVisible = true;
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = false;
+                this.btnHedingVisible = false;
+              } else if (this.flowableTask.formKey === "renwuchaifen") {
+                this.btnCbfxVisible = false;
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = true;
+                this.btnHedingVisible = false;
+              } else if (this.flowableTask.formKey === "xiangmulixiangshenhe") {
+                this.btnCbfxVisible = false;
+                this.btnReviewVisible = false;
+                this.btnRwcfVisible = false;
+                this.btnHedingVisible = true;
+              }
+            }
+          }
+        });
     },
   },
 };

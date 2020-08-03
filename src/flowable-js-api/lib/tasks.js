@@ -225,7 +225,7 @@ function TasksResource (options, http) {
   }
 
   this.getTaskForm = (taskId) => {
-    return http.get(resourcePath + `/${taskId}/form`,
+    return http.get(resourcePath + `-extensions/${taskId}/form`,
       getRequestArgs()
     )
   }
