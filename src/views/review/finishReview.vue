@@ -96,7 +96,7 @@ export default {
       let response = null;
       let params = {
         adviceID: this.data.adviceID,
-        taskID: this.$route.query.id,
+        taskID: this.$route.query.taskID,
         type: "任务审核",
         result: this.formData.result,
         opinion: this.formData.opinion,

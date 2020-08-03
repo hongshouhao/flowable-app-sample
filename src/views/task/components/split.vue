@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { getTasks } from "@/api/task";
+import { getTasksByAdvice } from "@/api/task";
 import AddTask from "./add";
 import TaskItem from "./item";
 export default {
@@ -51,9 +51,9 @@ export default {
       this.taskVisible = false;
       let response = null;
       let params = {
-        adviceID: this.$route.query.id,
+        adviceID: this.$route.query.adviceID,
       };
-      response = await getTasks(params);
+      response = await getTasksByAdvice(params);
       this.tasks = response.data;
     },
     splitComplete() {

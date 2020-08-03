@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+import { guid } from "@/core/utils";
 import { addTask } from "@/api/task";
 export default {
   components: {},
@@ -119,6 +120,7 @@ export default {
       this.formData.creator = "项目组";
       this.formData.ifHtn = true;
       this.formData.ifDsf = false;
+      this.formData.taskID = guid();
 
       let response = await addTask(this.formData);
 

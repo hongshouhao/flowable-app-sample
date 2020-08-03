@@ -145,10 +145,11 @@ export default {
       this.getProcess();
       this.getFinish();
     },
+
     //根据任务id查询建议
     async getAdviceByTask() {
       let params = {
-        id: this.$route.query.id,
+        taskID: this.$route.query.taskID,
       };
       let response = await getAdviceByTask(params);
       if (response.status === 1) {
@@ -171,10 +172,22 @@ export default {
       } else this.$message.error("查询失败，请检查网络！");
     },
 
+    //获取任务审核信息
+    async getReview(id) {
+      let params = {
+        adviceid: id,
+        type: "任务审核",
+      };
+      let response = await getReview(params);
+      if (response.status === 1) {
+        if (response.data.length > 0) this.reviewInfo = response.data[0];
+      } else this.$message.error("查询失败，请检查网络！");
+    },
+
     //获取任务信息
     async getTaskInfo() {
       let params = {
-        id: this.$route.query.id,
+        taskID: this.$route.query.taskID,
       };
       let response = await getTaskById(params);
       if (response.status === 1) {
@@ -185,7 +198,7 @@ export default {
     //获取需求分析
     async getRequest() {
       let params = {
-        id: this.$route.query.id,
+        taskID: this.$route.query.taskID,
       };
       let response = await getRequestByTaskId(params);
       if (response.status === 1) {
@@ -196,7 +209,7 @@ export default {
     //获取任务下的进度列表
     async getProcess() {
       let params = {
-        id: this.$route.query.id,
+        taskID: this.$route.query.taskID,
       };
       let response = await getProcessByTaskId(params);
       if (response.status === 1) {
@@ -207,23 +220,11 @@ export default {
     //获取任务下的成果情况
     async getFinish() {
       let params = {
-        id: this.$route.query.id,
+        taskID: this.$route.query.taskID,
       };
       let response = await getFinishByTaskId(params);
       if (response.status === 1) {
         if (response.data.length > 0) this.finishInfo = response.data[0];
-      } else this.$message.error("查询失败，请检查网络！");
-    },
-
-    //获取任务审核信息
-    async getReview(id) {
-      let params = {
-        adviceid: id,
-        type: "任务审核",
-      };
-      let response = await getReview(params);
-      if (response.status === 1) {
-        if (response.data.length > 0) this.reviewInfo = response.data[0];
       } else this.$message.error("查询失败，请检查网络！");
     },
   },

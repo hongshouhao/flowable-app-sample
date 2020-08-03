@@ -71,7 +71,7 @@ export default {
     },
     async addAnalysis() {
       let response = null;
-      this.formData.adviceid = this.$route.query.id;
+      this.formData.adviceid = this.$route.query.adviceID;
       this.formData.creator = "总集";
       response = await addAnalysis(this.formData);
       if (response.status === 1) {

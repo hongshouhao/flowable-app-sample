@@ -76,6 +76,7 @@
   </div>
 </template>
 <script>
+import { guid } from "@/core/utils";
 import { addTask } from "@/api/task";
 import { getProGroupList } from "@/api/projectGroup";
 export default {
@@ -85,7 +86,7 @@ export default {
     return {
       formData: {
         jjdw: undefined,
-        ifHtn: false,
+        ifHtn: true,
         ifDsf: false,
         jjcd: undefined,
         qwwcsj: null,
@@ -166,8 +167,9 @@ export default {
       }
     },
     async addTask() {
-      this.formData.adviceId = this.$route.query.id;
+      this.formData.adviceId = this.$route.query.adviceID;
       this.formData.creator = "总集";
+      this.formData.taskID = guid();
       let response = await addTask(this.formData);
       if (response.status === 1) {
         this.$emit("on-success");

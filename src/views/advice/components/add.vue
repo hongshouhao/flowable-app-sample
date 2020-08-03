@@ -182,15 +182,6 @@ export default {
       this.formData.code =
         "YHTS" + "-" + new Date().getFullYear() + "-" + data[0].code;
     },
-    guid() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
-        c
-      ) {
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
-    },
     submitForm() {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
@@ -200,7 +191,7 @@ export default {
     },
     async addAdvice() {
       this.formData.creator = "总集";
-      this.formData.adviceID = this.guid();
+      this.formData.adviceID = guid();
       let response = null;
       response = await addAdvice(this.formData);
       if (response.code == 200) {

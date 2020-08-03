@@ -82,7 +82,7 @@ export default {
     },
     async addRequest() {
       this.formData.creator = "项目组";
-      this.formData.taskid = this.$route.query.id;
+      this.formData.taskid = this.$route.query.taskID;
       let response = await addRequest(this.formData);
       if (response.status === 1) {
         this.$emit("on-success");

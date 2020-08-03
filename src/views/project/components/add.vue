@@ -58,6 +58,7 @@
   </div>
 </template>
 <script>
+import { guid } from "@/core/utils";
 import { getAdviceCode, addAdvice } from "@/api/advice";
 import { addProGroup } from "@/api/projectGroup";
 export default {
@@ -140,15 +141,7 @@ export default {
         this.addAdvice();
       });
     },
-    guid() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (
-        c
-      ) {
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
-    },
+
     async gen() {
       const { data } = await getAdviceCode();
       this.advice.code =
@@ -157,7 +150,7 @@ export default {
     async addAdvice() {
       this.advice.ms = this.formData.descrpition;
       this.advice.creator = "总集";
-      this.advice.adviceID = this.guid();
+      this.advice.adviceID = guid();
       this.advice.ifDefault = true;
       let response = null;
       response = await addAdvice(this.advice);

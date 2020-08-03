@@ -92,7 +92,7 @@ export default {
     rowClick(row) {
       this.$router.push({
         path: "/task/detail",
-        query: { id: row.id },
+        query: { taskID: row.taskID },
       });
     },
     exportExcel() {},

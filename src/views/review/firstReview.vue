@@ -95,7 +95,7 @@ export default {
     async submitReview() {
       let response = null;
       let params = {
-        adviceID: this.$route.query.id,
+        adviceID: this.$route.query.adviceID,
         taskID: this.data.taskID,
         type: "领导初审",
         result: this.formData.result,

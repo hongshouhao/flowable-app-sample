@@ -96,7 +96,7 @@ export default {
     rowClick(row) {
       this.$router.push({
         path: "/advice/detail",
-        query: { id: row.adviceID },
+        query: { adviceID: row.adviceID },
       });
     },
     exportExcel() {},
