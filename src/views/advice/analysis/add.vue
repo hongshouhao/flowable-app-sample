@@ -91,6 +91,7 @@ export default {
       if (response.status === 1) {
 
         let execSuccess = await this.excuFlowableTask();
+        debugger
         if (execSuccess === 1) {
           this.$emit("on-success");
           this.$message({
@@ -120,18 +121,25 @@ export default {
         variables: [
           // {
           //   name: "adviceid",
-          //   type: "String",
+          //   type: "string",
           //   value: this.formData.adviceid,
           // }
         ],
         localScope: false
       }
-
-      await this.$flowableClient.tasks.executeAction(
+      debugger
+      return await this.$flowableClient.tasks.executeAction(
         this.flowableTaskId,
         taskActionRequest
-      ).then(resp => 1)
-        .catch(err => 0)
+      ).then(resp => {
+        debugger
+        return 1
+      })
+        .catch(err => {
+          debugger
+          console.error(err)
+          return 0
+        })
     }
   },
 };

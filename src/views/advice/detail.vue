@@ -235,8 +235,7 @@ export default {
           }
           else {
             this.flowableTask = myTasks.filter(x => x.formKey !== 'renwushenhe')[0]
-            debugger
-            this.$store.commit('currentProcessInstanceId', _this.flowableTask.processInstanceId)
+            _this.$store.state.currentProcessInstanceId = _this.flowableTask.processInstanceId;
 
             this.btnGrpVisible = true
             if (this.flowableTask) {
