@@ -19,11 +19,11 @@
       </el-collapse-item>
     </el-collapse>
     <div class="btn-group" v-show="btnGrpVisible">
-      <el-button type="primary" v-show="btnCbfxVisible" plain @click="cbfxVisible=true">提交初步分析</el-button>
-      <el-button type="primary" v-show="btnRwcfVisible" plain @click="rwcfVisible=true">任务拆分</el-button>
-      <el-button type="primary" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" v-show="btnHedingVisible" plain @click="submitRst(2)">核定</el-button>
-      <el-button type="primary" plain @click="submitSecondReview">提交指派</el-button>
+      <el-button type="primary" v-show="stage=='1'" plain @click="cbfxVisible=true">提交初步分析</el-button>
+      <el-button type="primary" v-show="stage=='2'" plain @click="rwcfVisible=true">任务拆分</el-button>
+      <el-button type="primary" v-show="stage=='3'" plain @click="submitSecondReview">提交复核</el-button>
+      <el-button type="primary" v-show="stage=='4'" plain @click="submitRst(2)">核定</el-button>
+      <el-button type="primary" v-show="stage=='5'" plain @click="submitSecondReview">提交指派</el-button>
     </div>
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
@@ -65,6 +65,7 @@ export default {
   },
   data() {
     return {
+      stage: "0",
       openNames: ["1", "2", "3", "4"],
       cbfxVisible: false,
       rwcfVisible: false,
@@ -196,7 +197,6 @@ export default {
             this.flowableTask = myTasks.filter(
               (x) => x.formKey !== "renwushenhe"
             )[0];
-            debugger;
             this.$store.commit(
               "currentProcessInstanceId",
               _this.flowableTask.processInstanceId
@@ -206,22 +206,12 @@ export default {
             if (this.flowableTask) {
               this.submitReviewData.flowableTaskId = this.flowableTask.id;
               //根据节点设置按钮
-              debugger;
               if (this.flowableTask.formKey === "xiangmuxuqiu") {
-                this.btnCbfxVisible = true;
-                this.btnReviewVisible = false;
-                this.btnRwcfVisible = false;
-                this.btnHedingVisible = false;
+                this.stage = "1";
               } else if (this.flowableTask.formKey === "renwuchaifen") {
-                this.btnCbfxVisible = false;
-                this.btnReviewVisible = false;
-                this.btnRwcfVisible = true;
-                this.btnHedingVisible = false;
+                this.stage = "2";
               } else if (this.flowableTask.formKey === "xiangmulixiangshenhe") {
-                this.btnCbfxVisible = false;
-                this.btnReviewVisible = false;
-                this.btnRwcfVisible = false;
-                this.btnHedingVisible = true;
+                this.stage = "4";
               }
             }
           }
