@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { getAdviceByTask, getAnalysis } from "@/api/advice";
+import { getAdviceByTask, getAnalysisByAdvice } from "@/api/advice";
 import {
   getTaskById,
   getRequestByTaskId,
@@ -155,18 +155,18 @@ export default {
       if (response.status === 1) {
         if (response.data.length > 0) {
           this.adviceInfo = response.data[0];
-          this.getAnalysis(this.adviceInfo.adviceID);
+          this.getAnalysisByAdvice(this.adviceInfo.adviceID);
           this.getReview(this.adviceInfo.adviceID);
         }
       } else this.$message.error("查询失败，请检查网络！");
     },
 
     //获取初步分析
-    async getAnalysis(id) {
+    async getAnalysisByAdvice(id) {
       let params = {
         adviceid: id,
       };
-      let response = await getAnalysis(params);
+      let response = await getAnalysisByAdvice(params);
       if (response.status === 1) {
         if (response.data.length > 0) this.analysisInfo = response.data[0];
       } else this.$message.error("查询失败，请检查网络！");

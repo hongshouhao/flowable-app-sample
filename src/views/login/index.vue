@@ -32,7 +32,10 @@ body {
   width: 100%;
   height: 100%;
   background: url("../../assets/login/loginBg.png") no-repeat center center;
-  background-size: 100% auto;
+  background-size: 100% 100%;
+  min-width: 1200px;
+  min-height: 800px;
+  overflow: auto;
   .login-title {
     margin: 0 auto;
     line-height: 150px;
@@ -40,7 +43,6 @@ body {
     font-size: 2.5em;
     letter-spacing: 0.1em;
     text-align: center;
-    width: 550px;
     height: 100px;
     img {
       margin-top: -10px;
@@ -57,7 +59,7 @@ body {
   }
   .login-footer {
     z-index: 11;
-    position: fixed;
+    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
