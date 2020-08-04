@@ -142,14 +142,6 @@ export default {
       ],
     };
   },
-  props: {
-    flowableProcessId: {
-      type: String,
-      default () {
-        return ''
-      },
-    }
-  },
   computed: {},
   watch: {},
   created () { },
