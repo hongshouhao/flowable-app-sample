@@ -192,15 +192,6 @@ export default {
         .then((tasks) => {
           let myTasks = tasks.data.data;
           if (myTasks.length === 0) {
-            this.btnGrpVisible = false;
-          } else {
-            this.flowableTask = myTasks.filter(
-              (x) => x.formKey !== "renwushenhe"
-            )[0];
-            this.$store.commit(
-              "currentProcessInstanceId",
-              _this.flowableTask.processInstanceId
-            );
 
             this.btnGrpVisible = true;
             if (this.flowableTask) {

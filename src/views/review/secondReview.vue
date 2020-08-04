@@ -134,7 +134,7 @@ export default {
         variables: [
           // {
           //   name: "adviceid",
-          //   type: "String",
+          //   type: "string",
           //   value: this.$route.query.id,
           // } 
         ],

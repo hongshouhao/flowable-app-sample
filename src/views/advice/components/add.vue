@@ -173,11 +173,9 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
-  mounted() {
-    this.prodef = this.$store.state.processDefinitions.find(
-      (x) => x.key === "szsp-service-improve"
-    );
+  created () { },
+  mounted () {
+    this.prodef = this.$store.state.processDefinitions.find(x => x.key === "szsp-service-improve2")
   },
   methods: {
     async gen() {
