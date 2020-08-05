@@ -91,7 +91,6 @@ export default {
     },
   },
   mounted() {
-    this.getMyTask();
     this.init();
   },
   methods: {
@@ -103,6 +102,7 @@ export default {
       this.getAdviceById();
       this.getAnalysisByAdvice();
       this.getReview();
+      this.getMyTask();
     },
 
     //获取建议中的所有任务
@@ -192,8 +192,13 @@ export default {
         .then((tasks) => {
           let myTasks = tasks.data.data;
           if (myTasks.length === 0) {
-
+            this.btnGrpVisible = false;
+          } else {
             this.btnGrpVisible = true;
+            this.flowableTask = myTasks.filter(
+              (x) => x.formKey !== "renwushenhe"
+            )[0];
+
             if (this.flowableTask) {
               this.submitReviewData.flowableTaskId = this.flowableTask.id;
               //根据节点设置按钮
