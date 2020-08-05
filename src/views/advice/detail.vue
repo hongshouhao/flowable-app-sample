@@ -11,7 +11,7 @@
         <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
           <task-item :data="item"></task-item>
           <first-info :data="item" v-if="item.opinion"></first-info>
-          <el-button type="primary" plain @click="submitRst(1,item)">审核</el-button>
+          <el-button type="primary" v-if="!item.opinion" plain @click="submitRst(1,item)">审核</el-button>
         </el-card>
       </el-collapse-item>
       <el-collapse-item title="审核信息" name="4" v-if="Object.keys(reviewInfo).length>0">
@@ -169,8 +169,32 @@ export default {
     },
 
     //提交复审操作 --未写
-    submitSecondReview() {
+    async submitSecondReview() {
       this.$message.success("已提交复审！");
+      let response = await this.excuFlowableTask();
+      if (response === 1) {
+        this.$message.success("已提交复审！");
+      } else {
+        this.$message.error("提交复审失败");
+      }
+    },
+    async excuFlowableTask() {
+      let taskActionRequest = {
+        action: "complete",
+        variables: [],
+        localScope: false,
+      };
+      return await this.$flowableClient.tasks
+        .executeAction(this.flowableTaskId, taskActionRequest)
+        .then((resp) => {
+          debugger;
+          return 1;
+        })
+        .catch((err) => {
+          debugger;
+          console.error(err);
+          return 0;
+        });
     },
 
     //完成拆分任务 --未写
@@ -198,6 +222,7 @@ export default {
             this.flowableTask = myTasks.filter(
               (x) => x.formKey !== "renwushenhe"
             )[0];
+            console.log(_this.flowableTask);
 
             if (this.flowableTask) {
               this.submitReviewData.flowableTaskId = this.flowableTask.id;

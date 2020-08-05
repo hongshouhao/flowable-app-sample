@@ -84,7 +84,6 @@ export default {
       response = await addAnalysis(this.formData);
       if (response.status === 1) {
         let execSuccess = await this.excuFlowableTask();
-        debugger
         if (execSuccess === 1) {
           this.$emit("on-success");
           this.$message.success("创建成功！");
@@ -98,29 +97,21 @@ export default {
     async excuFlowableTask() {
       let taskActionRequest = {
         action: "complete",
-        variables: [
-          // {
-          //   name: "adviceid",
-          //   type: "string",
-          //   value: this.formData.adviceid,
-          // }
-        ],
-        localScope: false
-      }
-      debugger
-      return await this.$flowableClient.tasks.executeAction(
-        this.flowableTaskId,
-        taskActionRequest
-      ).then(resp => {
-        debugger
-        return 1
-      })
-        .catch(err => {
-          debugger
-          console.error(err)
-          return 0
+        variables: [],
+        localScope: false,
+      };
+      return await this.$flowableClient.tasks
+        .executeAction(this.flowableTaskId, taskActionRequest)
+        .then((resp) => {
+          debugger;
+          return 1;
         })
-    }
+        .catch((err) => {
+          debugger;
+          console.error(err);
+          return 0;
+        });
+    },
   },
 };
 </script>
