@@ -142,14 +142,6 @@ export default {
       ],
     };
   },
-  props: {
-    flowableProcessId: {
-      type: String,
-      default () {
-        return ''
-      },
-    }
-  },
   computed: {},
   watch: {},
   created () { },
@@ -202,75 +194,16 @@ export default {
     async addFlowableTask () {
       let _this = this
       let processId = _this.$store.state.currentProcessInstanceId
-      debugger
-
-      const tasks = await this.$flowableClient.tasks.queryTasks({
-        processInstanceId: processId,
-        includeTaskLocalVariables: true,
-        includeProcessVariables: false,
-      })
-      debugger
-
-      let emptyTask = tasks.data.data.find(
-        (item) => item.formKey === 'xinjianrenwu'
-      )
 
       debugger
-      if (emptyTask) {
-        return await this.excuFlowableTask(emptyTask.id)
-      } else {
 
-        let addMultiInstanceExecutionRequest = {
-          activityId: 'subprocess-renwushenhe',
-          variables: [
-            //   {
-            //   name: "adviceid",
-            //   type: "string",
-            //   value: this.formData.adviceId,
-            // }, 
-            {
-              name: "ifDsf",
-              type: "string",
-              value: this.formData.ifDsf.toString(),
-            },
-            {
-              name: "ifHtn",
-              type: "string",
-              value: this.formData.ifHtn.toString(),
-            },
-            {
-              name: "taskid",
-              type: "string",
-              value: this.formData.taskID,
-            }
-          ],
-        }
-
-        return _this.$flowableClient.processInstances
-          .addMultiInstanceExecution(
-            processId,
-            addMultiInstanceExecutionRequest
-          )
-          .then((response) => {
-            return 1
-          })
-          .catch((e) => {
-            console.error(e)
-            return 0
-          })
-      }
-    },
-    resetForm () {
-      this.$refs["elForm"].resetFields();
-    },
-    async  excuFlowableTask (flowableTaskId, taskId) {
-      let taskActionRequest = {
-        action: 'complete',
+      let executionRequest = {
+        activityId: 'subprocess-renwushenhe',
         variables: [
-          // {
+          //   {
           //   name: "adviceid",
           //   type: "string",
-          //   value: adviceId,
+          //   value: this.formData.adviceId,
           // }, 
           {
             name: "ifDsf",
@@ -283,22 +216,30 @@ export default {
             value: this.formData.ifHtn.toString(),
           },
           {
-            name: "taskid",
+            name: "taskId",
             type: "string",
             value: this.formData.taskID,
-          }
+          },
         ],
-        localScope: false
       }
-      return await this.$flowableClient.tasks.executeAction(
-        flowableTaskId,
-        taskActionRequest
-      ).then(resp => { return 1 })
-        .catch(err => {
-          console.error(err)
+
+      return _this.$flowableClient.processInstances
+        .addMultiInstanceExecution(
+          processId,
+          executionRequest
+        )
+        .then((response) => {
+          return 1
+        })
+        .catch((e) => {
+          console.error(e)
           return 0
         })
     },
+    resetForm () {
+      this.$refs["elForm"].resetFields();
+    },
+
   },
 };
 </script>

@@ -11,7 +11,7 @@
         <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
           <task-item :data="item"></task-item>
           <first-info :data="item" v-if="item.opinion"></first-info>
-          <el-button type="primary" v-if="!item.opinion" plain @click="submitRst(1,item)">审核</el-button>
+          <el-button type="primary" v-else plain @click="submitSubtask( item)">审核</el-button>
         </el-card>
       </el-collapse-item>
       <el-collapse-item title="审核信息" name="4" v-if="Object.keys(reviewInfo).length>0">
@@ -22,18 +22,24 @@
       <el-button type="primary" v-show="stage=='1'" plain @click="cbfxVisible=true">提交初步分析</el-button>
       <el-button type="primary" v-show="stage=='2'" plain @click="rwcfVisible=true">任务拆分</el-button>
       <el-button type="primary" v-show="stage=='3'" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" v-show="stage=='4'" plain @click="submitRst(2)">核定</el-button>
+      <el-button type="primary" v-show="stage=='4'" plain @click="submitMainTask( )">核定</el-button>
       <el-button type="primary" v-show="stage=='5'" plain @click="submitSecondReview">提交指派</el-button>
+
+      <el-button type="primary" plain @click="diagramVisible=true">流程圖</el-button>
     </div>
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
     </el-drawer>
     <el-drawer title="任务拆分" :visible.sync="rwcfVisible" size="450px" :wrapperClosable="false">
-      <split-task v-if="rwcfVisible" @on-success="init()"></split-task>
+      <split-task v-if="rwcfVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></split-task>
     </el-drawer>
     <el-dialog title="审核意见" :visible.sync="reviewVisible">
       <first-review v-if="first" @on-success="init()" :data="submitReviewData"></first-review>
       <second-review v-if="!first" :flowableTaskId="flowableTaskId" @on-success="init()"></second-review>
+    </el-dialog>
+
+    <el-dialog title="流程圖" :visible.sync="diagramVisible">
+      <process-transition :processInstanceId="flowableProcessId" />
     </el-dialog>
   </div>
 </template>
@@ -51,6 +57,8 @@ import FirstReview from "../review/firstReview";
 import FirstInfo from "../review/firstReviewInfo";
 import SecondReview from "../review/secondReview";
 import SecondInfo from "../review/secondReivewInfo";
+import ProcessTransition from "../../flowable/ProcessTransition";
+
 export default {
   components: {
     InfoView,
@@ -62,6 +70,7 @@ export default {
     FirstInfo,
     SecondReview,
     SecondInfo,
+    ProcessTransition,
   },
   data() {
     return {
@@ -70,6 +79,7 @@ export default {
       cbfxVisible: false,
       rwcfVisible: false,
       reviewVisible: false,
+      diagramVisible: false,
       first: false,
       second: false,
       tasks: [],
@@ -82,12 +92,18 @@ export default {
       btnRwcfVisible: false,
       btnReviewVisible: false,
       btnHedingVisible: false,
-      flowableTask: {},
+      flowableMainTask: {},
+      flowableTasks: [],
     };
   },
   computed: {
     flowableTaskId() {
-      return this.flowableTask.id;
+      if (this.flowableMainTask) return this.flowableMainTask.id;
+      else return "";
+    },
+    flowableProcessId() {
+      if (this.flowableMainTask) return this.flowableMainTask.processInstanceId;
+      else return "";
     },
   },
   mounted() {
@@ -155,17 +171,40 @@ export default {
         adviceid: this.$route.query.adviceID,
       };
       response = await getTasksByAdvice(params);
+
       if (response.status === 1) {
         if (response.data.length > 0) this.analysisInfo = response.data[0];
       } else this.$message.error("查询失败，请检查网络！");
     },
 
     //弹出审核对话框
-    submitRst(type, data) {
+    async submitSubtask(data) {
       this.submitReviewData.data = data;
+      debugger;
+      for (let i = 0; i < this.flowableTasks.length; i++) {
+        debugger;
+        const bizTaskId = await this.$flowableClient.taskVariables.getVariable(
+          this.flowableTasks[i].id,
+          "taskId"
+        );
+        debugger;
+        if (bizTaskId.data.value === data.taskID) {
+          this.submitReviewData.flowableTaskId = this.flowableTasks[i].id;
+          break;
+        }
+      }
+      if (this.submitReviewData.flowableTaskId === undefined) {
+        throw "沒有找到對應的流程";
+      }
+
       this.reviewVisible = true;
-      if (type == 1) this.first = true;
-      else this.first = false;
+      this.first = true;
+    },
+
+    async submitMainTask() {
+      this.submitReviewData.flowableTaskId = this.flowableMainTask.id;
+      this.reviewVisible = true;
+      this.first = false;
     },
 
     //提交复审操作 --未写
@@ -204,6 +243,7 @@ export default {
 
     getMyTask() {
       let _this = this;
+      debugger;
 
       let username = this.$flowableClient.options.auth.username;
       this.$flowableClient.tasks
@@ -214,26 +254,36 @@ export default {
           includeProcessVariables: true,
         })
         .then((tasks) => {
+          debugger;
           let myTasks = tasks.data.data;
           if (myTasks.length === 0) {
             this.btnGrpVisible = false;
           } else {
             this.btnGrpVisible = true;
-            this.flowableTask = myTasks.filter(
-              (x) => x.formKey !== "renwushenhe"
+            this.flowableMainTask = myTasks.filter(
+              (x) =>
+                x.formKey !== "xinjianrenwu" &&
+                x.formKey !== "tianxiejindu" &&
+                x.formKey !== "renwushenhe"
             )[0];
-            console.log(_this.flowableTask);
-
-            if (this.flowableTask) {
-              this.submitReviewData.flowableTaskId = this.flowableTask.id;
+            this.flowableTasks = myTasks.filter(
+              (x) => x.formKey === "tianxiejindu" || x.formKey === "renwushenhe"
+            );
+            if (this.flowableMainTask) {
+              debugger;
+              _this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
               //根据节点设置按钮
-              if (this.flowableTask.formKey === "xiangmuxuqiu") {
+              if (this.flowableMainTask.formKey === "xiangmuxuqiu") {
                 this.stage = "1";
-              } else if (this.flowableTask.formKey === "renwuchaifen") {
+              } else if (this.flowableMainTask.formKey === "renwuchaifen") {
                 this.stage = "2";
-              } else if (this.flowableTask.formKey === "xiangmulixiangshenhe") {
+              } else if (
+                this.flowableMainTask.formKey === "xiangmulixiangshenhe"
+              ) {
                 this.stage = "4";
               }
+            } else {
+              this.btnGrpVisible = false;
             }
           }
         });

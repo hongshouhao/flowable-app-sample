@@ -30,12 +30,14 @@ export default {
     };
   },
   mounted () {
+    debugger
     this.$flowableClient.processDefinitions
       .getProcessDefinitions({ latest: true })
       .then(result => {
         console.table(result.data.data)
         this.$store.commit('processDefinitions', result.data.data)
       })
+      .catch(err => console.error(err))
   }
 };
 </script>

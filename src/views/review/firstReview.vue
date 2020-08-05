@@ -117,36 +117,37 @@ export default {
       };
       response = await submitReview(params);
       if (response.status === 1) {
+        debugger
         let execSuccess = await this.excuFlowableTask();
         if (execSuccess === 1) {
           this.$emit("on-success");
           this.$message.success("保存成功！");
         }
         else {
-          this.$message.success("任务提交失败");
+          this.$message.error("任务提交失败");
         }
       } else {
         this.$message.error("保存失败，请检查网络");
       }
     },
-    async  excuFlowableTask () {
+    async excuFlowableTask () {
       let taskActionRequest = {
         action: 'complete',
         variables: [
           {
-            name: "adviceid",
-            type: "string",
-            value: this.$route.query.id,
-          }, {
-            name: "taskid",
+            name: "taskId",
             type: "string",
             value: this.data.data.taskID,
+          }, {
+            name: "renwushenhejieguo",
+            type: "string",
+            value: this.formData.result == 1 ? 'true' : 'false',
           }
         ],
-        localScope: true
+        localScope: false
       }
 
-      await this.$flowableClient.tasks.executeAction(
+      return await this.$flowableClient.tasks.executeAction(
         this.data.flowableTaskId,
         taskActionRequest
       ).then(resp => 1)

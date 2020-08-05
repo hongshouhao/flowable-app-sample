@@ -37,6 +37,7 @@
 
 <script>
 export default {
+  name: 'process-transition',
   data () {
     return {
       diagramSource: '',

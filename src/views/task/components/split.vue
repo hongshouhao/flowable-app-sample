@@ -42,6 +42,14 @@ export default {
       taskVisible: false,
     };
   },
+  props: {
+    flowableTaskId: {
+      type: String,
+      default () {
+        return ''
+      },
+    }
+  },
   mounted () {
     this.reload();
   },
@@ -53,10 +61,20 @@ export default {
         adviceID: this.$route.query.adviceID,
       };
       response = await getTasksByAdvice(params);
+      debugger
       this.tasks = response.data;
     },
-    splitComplete () {
-
+    async splitComplete () {
+      let taskActionRequest = {
+        action: 'complete',
+        variables: [
+        ],
+        localScope: false
+      }
+      await this.$flowableClient.tasks.executeAction(
+        this.flowableTaskId,
+        taskActionRequest
+      )
 
       this.$emit("on-success");
     },
