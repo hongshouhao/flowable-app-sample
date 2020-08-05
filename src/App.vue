@@ -36,14 +36,33 @@ body,
   .el-collapse-item__header {
     font-weight: bold;
     font-size: 15px;
+    color: #409eff;
   }
   .btn-group {
-    padding: 20px 0;
+    width: 100%;
+    height: 50px;
+    background: #fff;
+    padding: 5px 10px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    bottom: 0;
   }
 }
 span:focus,
 div:focus,
 button:focus {
   outline: 0;
+}
+
+/* 在全局CSS里引用: */
+/* 滚动条宽度 */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 10px;
+}
+/* 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #a1a3a9;
+  border-radius: 3px;
 }
 </style>

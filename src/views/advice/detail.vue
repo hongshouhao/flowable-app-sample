@@ -1,20 +1,37 @@
 <template>
-  <div>
+  <div class="advice_detail">
     <el-collapse :value="openNames">
-      <el-collapse-item title="初步要求内容" name="1">
+      <el-collapse-item name="1">
+        <template slot="title">
+          <i class="header-icon el-icon-notebook-1"></i>初步要求内容
+        </template>
         <info-view :adviceInfo="adviceInfo"></info-view>
       </el-collapse-item>
-      <el-collapse-item title="初步分析" name="2" v-if="Object.keys(analysisInfo).length>0">
+      <el-collapse-item name="2" v-if="Object.keys(analysisInfo).length>0">
+        <template slot="title">
+          <i class="header-icon el-icon-data-analysis"></i>初步分析
+        </template>
         <analysis-info :analysis="analysisInfo"></analysis-info>
       </el-collapse-item>
-      <el-collapse-item title="任务拆分情况" name="3" v-if="tasks.length>0">
+      <el-collapse-item name="3" v-if="tasks.length>0">
+        <template slot="title">
+          <i class="header-icon el-icon-collection"></i>任务拆分情况
+        </template>
         <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
           <task-item :data="item"></task-item>
           <first-info :data="item" v-if="item.opinion"></first-info>
-          <el-button type="primary" v-else plain @click="submitSubtask( item)">审核</el-button>
+          <el-button
+            type="primary"
+            v-if="(!item.opinion)&&(!item.ifHtn)"
+            plain
+            @click="submitSubtask(item)"
+          >审核</el-button>
         </el-card>
       </el-collapse-item>
       <el-collapse-item title="审核信息" name="4" v-if="Object.keys(reviewInfo).length>0">
+        <template slot="title">
+          <i class="header-icon el-icon-user-solid"></i>审核信息
+        </template>
         <second-info :data="reviewInfo"></second-info>
       </el-collapse-item>
     </el-collapse>
@@ -22,7 +39,7 @@
       <el-button type="primary" v-show="stage=='1'" plain @click="cbfxVisible=true">提交初步分析</el-button>
       <el-button type="primary" v-show="stage=='2'" plain @click="rwcfVisible=true">任务拆分</el-button>
       <el-button type="primary" v-show="stage=='3'" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" v-show="stage=='4'" plain @click="submitMainTask( )">核定</el-button>
+      <el-button type="primary" v-show="stage=='4'" plain @click="submitMainTask()">核定</el-button>
       <el-button type="primary" v-show="stage=='5'" plain @click="submitSecondReview">提交指派</el-button>
 
       <el-button type="primary" plain @click="diagramVisible=true">流程圖</el-button>
@@ -30,7 +47,13 @@
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
     </el-drawer>
-    <el-drawer title="任务拆分" :visible.sync="rwcfVisible" size="450px" :wrapperClosable="false">
+    <el-drawer
+      title="任务拆分"
+      :visible.sync="rwcfVisible"
+      size="450px"
+      :wrapperClosable="false"
+      :before-close="handleClose"
+    >
       <split-task v-if="rwcfVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></split-task>
     </el-drawer>
     <el-dialog title="审核意见" :visible.sync="reviewVisible">
@@ -180,14 +203,11 @@ export default {
     //弹出审核对话框
     async submitSubtask(data) {
       this.submitReviewData.data = data;
-      debugger;
       for (let i = 0; i < this.flowableTasks.length; i++) {
-        debugger;
         const bizTaskId = await this.$flowableClient.taskVariables.getVariable(
           this.flowableTasks[i].id,
           "taskId"
         );
-        debugger;
         if (bizTaskId.data.value === data.taskID) {
           this.submitReviewData.flowableTaskId = this.flowableTasks[i].id;
           break;
@@ -217,6 +237,7 @@ export default {
         this.$message.error("提交复审失败");
       }
     },
+
     async excuFlowableTask() {
       let taskActionRequest = {
         action: "complete",
@@ -226,11 +247,9 @@ export default {
       return await this.$flowableClient.tasks
         .executeAction(this.flowableTaskId, taskActionRequest)
         .then((resp) => {
-          debugger;
           return 1;
         })
         .catch((err) => {
-          debugger;
           console.error(err);
           return 0;
         });
@@ -241,10 +260,14 @@ export default {
       this.$message.success("拆分完成");
     },
 
+    //任务拆分关闭后刷新数据
+    handleClose(done) {
+      this.init();
+      done();
+    },
+
     getMyTask() {
       let _this = this;
-      debugger;
-
       let username = this.$flowableClient.options.auth.username;
       this.$flowableClient.tasks
         .queryTasks({
@@ -254,7 +277,6 @@ export default {
           includeProcessVariables: true,
         })
         .then((tasks) => {
-          debugger;
           let myTasks = tasks.data.data;
           if (myTasks.length === 0) {
             this.btnGrpVisible = false;
@@ -270,7 +292,6 @@ export default {
               (x) => x.formKey === "tianxiejindu" || x.formKey === "renwushenhe"
             );
             if (this.flowableMainTask) {
-              debugger;
               _this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
               //根据节点设置按钮
               if (this.flowableMainTask.formKey === "xiangmuxuqiu") {
@@ -291,3 +312,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.advice_detail {
+  .header-icon {
+    margin: 0 10px;
+    font-size: 17px;
+  }
+}
+</style>

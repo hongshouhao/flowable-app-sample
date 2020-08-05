@@ -1,14 +1,13 @@
 <template>
   <el-container class="main">
-    <el-aside width="200px"
-              class="aside">
+    <el-aside width="200px" class="aside">
       <user-info></user-info>
       <menu-view></menu-view>
     </el-aside>
     <el-container direction="vertical">
       <el-header>{{ SysName }}</el-header>
       <el-main>
-        <el-card>
+        <el-card :body-style="{ padding: '5px 15px',width:'100%',height:'100%',position:'relative' }">
           <router-view />
         </el-card>
       </el-main>
@@ -23,22 +22,21 @@ import MenuView from "./menu";
 import UserInfo from "./userInfo";
 export default {
   components: { MenuView, UserInfo },
-  data () {
+  data() {
     return {
       user: {},
       SysName: "苏州工业园区“一网通办”优化提升服务平台",
     };
   },
-  mounted () {
-    debugger
+  mounted() {
     this.$flowableClient.processDefinitions
       .getProcessDefinitions({ latest: true })
-      .then(result => {
-        console.table(result.data.data)
-        this.$store.commit('processDefinitions', result.data.data)
+      .then((result) => {
+        console.table(result.data.data);
+        this.$store.commit("processDefinitions", result.data.data);
       })
-      .catch(err => console.error(err))
-  }
+      .catch((err) => console.error(err));
+  },
 };
 </script>
 <style lang="scss" scoped>
