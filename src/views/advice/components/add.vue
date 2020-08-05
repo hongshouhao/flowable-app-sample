@@ -251,7 +251,6 @@ export default {
             processDefinitionKey: this.prodef.key,
             businessKey: this.formData.adviceID
           })
-        debugger
         if (theProcs.data.data.length === 0) {
           return await this.$flowableClient.processInstances
             .startProcessInstance({
@@ -260,10 +259,8 @@ export default {
               variables: [],
               returnVariables: true,
             }).then((result) => {
-              debugger
               return 1
             }).catch((err) => {
-              debugger
               return 0
             });
         }

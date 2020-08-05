@@ -121,7 +121,7 @@ export default {
           this.$message.success("保存成功！");
         }
         else {
-          this.$message.success("任务提交失败");
+          this.$message.error("任务提交失败");
         }
       } else {
         this.$message.error("保存失败，请检查网络");
@@ -132,16 +132,16 @@ export default {
       let taskActionRequest = {
         action: 'complete',
         variables: [
-          // {
-          //   name: "adviceid",
-          //   type: "string",
-          //   value: this.$route.query.id,
-          // } 
+          {
+            name: "xiangmushenhejieguo",
+            type: "string",
+            value: this.formData.result == 1 ? 'true' : 'false',
+          }
         ],
-        //localScope: true
+        localScope: false
       }
 
-      await this.$flowableClient.tasks.executeAction(
+      return await this.$flowableClient.tasks.executeAction(
         this.flowableTaskId,
         taskActionRequest
       ).then(resp => 1)

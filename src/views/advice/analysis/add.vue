@@ -115,15 +115,10 @@ export default {
         });
       }
     },
-    async  excuFlowableTask () {
+    async excuFlowableTask () {
       let taskActionRequest = {
         action: 'complete',
         variables: [
-          // {
-          //   name: "adviceid",
-          //   type: "string",
-          //   value: this.formData.adviceid,
-          // }
         ],
         localScope: false
       }

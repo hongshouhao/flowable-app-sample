@@ -61,6 +61,7 @@ export default {
         adviceID: this.$route.query.adviceID,
       };
       response = await getTasksByAdvice(params);
+      debugger
       this.tasks = response.data;
     },
     async splitComplete () {
