@@ -17,7 +17,7 @@ import './plugins/viewer'
 import './plugins/linq'
 
 import Flowable from './plugins/flowable'
-const flowable = new Flowable('http://192.168.72.10:8068')
+const flowable = new Flowable('http://192.168.72.10:8080')
 Vue.prototype.$flowable = flowable;
 Vue.prototype.$flowableClient = flowable.api;
 

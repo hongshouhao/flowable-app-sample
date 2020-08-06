@@ -33,7 +33,6 @@ class Flowable {
           }
           return Promise.resolve(user);
         }).catch(e => {
-          debugger
           if (e.status === 401) {
             this.logout();
             window.location.reload(true);

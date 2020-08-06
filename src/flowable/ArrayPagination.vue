@@ -19,7 +19,6 @@ export default {
   },
   watch: {
     data () {
-      debugger
       this.currentPage = 1
       this.handleCurrentChange()
     }

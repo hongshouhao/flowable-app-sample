@@ -1,31 +1,37 @@
 <template>
   <div style="padding:10px">
-    <el-button type="primary"
-               icon="el-icon-plus"
-               plain
-               style="margin:0 10px 10px 10px"
-               @click="taskVisible=true">添加子任务</el-button>
-    <el-popconfirm confirmButtonText="确定"
-                   cancelButtonText="取消"
-                   icon="el-icon-info"
-                   @onConfirm="splitComplete"
-                   iconColor="orange"
-                   title="完成拆分后将无法再添加子任务，是否确认完成？">
-      <el-button slot="reference"
-                 type="success"
-                 icon="el-icon-success"
-                 plain>完成拆分</el-button>
+    <el-button
+      type="primary"
+      icon="el-icon-plus"
+      plain
+      style="margin:0 10px 10px 10px"
+      @click="taskVisible=true"
+    >添加子任务</el-button>
+    <el-popconfirm
+      confirmButtonText="确定"
+      cancelButtonText="取消"
+      icon="el-icon-info"
+      @onConfirm="splitComplete"
+      iconColor="orange"
+      title="完成拆分后将无法再添加子任务，是否确认完成？"
+    >
+      <el-button
+        slot="reference"
+        type="success"
+        icon="el-icon-success"
+        plain
+      >完成拆分</el-button>
     </el-popconfirm>
-    <el-card v-for="(item,index) in tasks"
-             :key="index"
-             style="margin-bottom:10px;">
+    <el-card v-for="(item,index) in tasks" :key="index" style="margin-bottom:10px;">
       <task-item :data="item"></task-item>
     </el-card>
-    <el-dialog title="添加子任务"
-               :visible.sync="taskVisible"
-               :modal="false"
-               :close-on-click-modal="false">
-      <add-task @on-success="reload()"></add-task>
+    <el-dialog
+      title="添加子任务"
+      :visible.sync="taskVisible"
+      :modal="false"
+      :close-on-click-modal="false"
+    >
+      <add-task v-if="taskVisible" @on-success="reload()"></add-task>
     </el-dialog>
   </div>
 </template>
@@ -36,7 +42,7 @@ import AddTask from "./add";
 import TaskItem from "./item";
 export default {
   components: { AddTask, TaskItem },
-  data () {
+  data() {
     return {
       tasks: [],
       taskVisible: false,
@@ -45,36 +51,34 @@ export default {
   props: {
     flowableTaskId: {
       type: String,
-      default () {
-        return ''
+      default() {
+        return "";
       },
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.reload();
   },
   methods: {
-    async reload () {
+    async reload() {
       this.taskVisible = false;
       let response = null;
       let params = {
         adviceID: this.$route.query.adviceID,
       };
       response = await getTasksByAdvice(params);
-      debugger
       this.tasks = response.data;
     },
-    async splitComplete () {
+    async splitComplete() {
       let taskActionRequest = {
-        action: 'complete',
-        variables: [
-        ],
-        localScope: false
-      }
+        action: "complete",
+        variables: [],
+        localScope: false,
+      };
       await this.$flowableClient.tasks.executeAction(
         this.flowableTaskId,
         taskActionRequest
-      )
+      );
 
       this.$emit("on-success");
     },

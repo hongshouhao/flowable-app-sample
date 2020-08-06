@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      layout="prev, pager, next"
+      layout="total,prev, pager, next"
       :total="total"
       :hide-on-single-page="true"
       @current-change="handleCurrentChange"
@@ -70,12 +70,13 @@ export default {
         page: 1,
         pagesize: 10,
       },
+      statusList: [],
       tableData: [],
       drawerVisible: false,
     };
   },
   mounted() {
-    this.getList();
+    this.getAdviceStatus();
   },
   methods: {
     async getList() {
@@ -83,9 +84,18 @@ export default {
       let response = await getAdviceList(this.formInline);
       if (response.status === 1) {
         {
-          let data = response.data;
-          this.tableData = data.rows;
-          this.total = data.total;
+          this.total = response.data.total;
+          this.tableData = response.data.rows;
+
+          for (var i = 0; i < response.data.rows.length; i++) {
+            this.tableData[i].status = this.statusList.find(
+              (obj) => obj.id === response.data.rows[i].adviceID
+            )
+              ? this.statusList.find(
+                  (obj) => obj.id === response.data.rows[i].adviceID
+                ).status
+              : "";
+          }
         }
       } else this.$message.error("查询失败，请检查网络！");
     },
@@ -98,6 +108,29 @@ export default {
         path: "/advice/detail",
         query: { adviceID: row.adviceID },
       });
+    },
+    async getAdviceStatus() {
+      let rsp = await this.$flowableClient.tasks.queryTasks({
+        processDefinitionKey: "szsp-service-improve2",
+        includeTaskLocalVariables: true,
+        includeProcessVariables: true,
+        size: 9999,
+      });
+
+      let data = rsp.data.data;
+      let arr = [];
+      data.forEach((item) => {
+        let variable = item.variables.filter(function (val) {
+          return val.name == "businessKey";
+        });
+        if (variable.length > 0)
+          this.statusList.push({
+            status: item.name,
+            id: variable[0].value,
+          });
+      });
+
+      this.getList();
     },
     exportExcel() {},
   },
