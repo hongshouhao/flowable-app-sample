@@ -1,6 +1,6 @@
-import {Table} from "./table";
-import {Core} from "./core"
+import {
+    validate
+} from "./validate";
 export {
-    Table,
-    Core
+    validate
 }

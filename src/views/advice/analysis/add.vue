@@ -70,11 +70,20 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.addAnalysis();
+        this.add();
       });
     },
     resetForm() {
       this.$refs["elForm"].resetFields();
+    },
+
+    async add() {
+      let response = await this.excuFlowableTask();
+      if (response === 1) {
+        this.addAnalysis();
+      } else {
+        this.$message.error("流程启动失败，请联系管理员");
+      }
     },
     async addAnalysis() {
       let response = null;
@@ -82,27 +91,10 @@ export default {
       this.formData.creator = "总集";
       response = await addAnalysis(this.formData);
       if (response.status === 1) {
-        let execSuccess = await this.excuFlowableTask();
-        if (execSuccess === 1) {
-          this.$emit("on-success");
-          this.$message({
-            showClose: true,
-            message: "创建成功！",
-            type: "success",
-          });
-        } else {
-          this.$message({
-            showClose: true,
-            message: "任务提交失败",
-            type: "error",
-          });
-        }
+        this.$emit("on-success");
+        this.$message.success("创建成功！");
       } else {
-        this.$message({
-          showClose: true,
-          message: "保存失败，请重新检查。",
-          type: "error",
-        });
+        this.$message.error("保存失败，请重新检查。");
       }
     },
     async excuFlowableTask() {
