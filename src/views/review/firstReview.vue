@@ -44,15 +44,6 @@ import { submitReview } from "@/api/review";
 export default {
   components: {},
   props: ["data"],
-  // props: {
-  //   "data",
-  //   flowableTaskId: {
-  //     type: String,
-  //     default () {
-  //       return ''
-  //     },
-  //   }
-  // },
   data () {
     return {
       formData: {

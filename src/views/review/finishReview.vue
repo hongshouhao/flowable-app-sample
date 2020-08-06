@@ -98,7 +98,7 @@ export default {
     async submitReview () {
       let response = null;
       let params = {
-        adviceID: this.data.adviceID,
+        adviceID: this.data.task.adviceID,
         taskID: this.$route.query.taskID,
         type: "任务审核",
         result: this.formData.result,
@@ -108,11 +108,40 @@ export default {
       };
       response = await submitReview(params);
       if (response.status === 1) {
-        this.$emit("on-success");
-        this.$message.success("保存成功！");
+        let execSuccess = await this.excuFlowableTask();
+        if (execSuccess === 1) {
+          this.$message.success("保存成功！");
+          this.$emit("on-success");
+        }
+        else {
+          this.$message.error("任务提交失败");
+        }
       } else {
         this.$message.error("保存失败，请检查网络");
       }
+    },
+    async excuFlowableTask () {
+      let taskActionRequest = {
+        action: 'complete',
+        variables: [
+          {
+            name: "taskId",
+            type: "string",
+            value: this.$route.query.taskID,
+          }, {
+            name: "renwushishishenhejieguo",
+            type: "string",
+            value: this.formData.result == 1 ? 'true' : 'false',
+          }
+        ],
+        localScope: false
+      }
+
+      return await this.$flowableClient.tasks.executeAction(
+        this.data.flowableTask.id,
+        taskActionRequest
+      ).then(resp => 1)
+        .catch(err => 0)
     },
   },
 };

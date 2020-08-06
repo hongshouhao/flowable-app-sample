@@ -242,7 +242,7 @@ export default {
         }
       }
       if (this.submitReviewData.flowableTaskId === undefined) {
-        throw '沒有找到對應的流程'
+        throw '沒有找到对应的流程'
       }
 
       this.reviewVisible = true;
@@ -286,20 +286,20 @@ export default {
           else {
             this.btnGrpVisible = true;
             this.flowableMainTask = myTasks.filter(
-              (x) => x.formKey !== "xinjianrenwu" && x.formKey !== "tianxiejindu" && x.formKey !== "renwushenhe"
+              (x) => x.name === "提交需求及效益分析" || x.name === "任务拆分" || x.name === '项目审核'
             )[0];
             this.flowableTasks = myTasks.filter(
-              (x) => x.formKey === "tianxiejindu" || x.formKey === "renwushenhe"
+              (x) => /*x.name === "填写进度" ||*/ x.name === "任务审核"
             );
             if (this.flowableMainTask) {
               debugger
               _this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId
               //根据节点设置按钮
-              if (this.flowableMainTask.formKey === "xiangmuxuqiu") {
+              if (this.flowableMainTask.name === "提交需求及效益分析") {
                 this.stage = "1";
-              } else if (this.flowableMainTask.formKey === "renwuchaifen") {
+              } else if (this.flowableMainTask.name === "任务拆分") {
                 this.stage = "2";
-              } else if (this.flowableMainTask.formKey === "xiangmulixiangshenhe") {
+              } else if (this.flowableMainTask.name === "项目审核") {
                 this.stage = "4";
               }
             } else {
