@@ -335,7 +335,8 @@ export default {
             this.btnGrpVisible = false;
           }
         }
-      }    }
+      }
+    }
   }
 }
 </script>
