@@ -31,7 +31,7 @@ export default {
     this.$flowableClient.processDefinitions
       .getProcessDefinitions({ latest: true })
       .then((result) => {
-        console.table(result.data.data);
+        // console.table(result.data.data);
         this.$store.commit("processDefinitions", result.data.data);
       })
       .catch((err) => console.error(err));

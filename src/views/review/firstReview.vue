@@ -80,7 +80,6 @@ export default {
   watch: {},
   created() {},
   mounted() {
-    console.log(this.data);
   },
   methods: {
     submitForm() {

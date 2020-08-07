@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div class="demo-upload-list" v-for="item in uploadList" :key="item.id">
+      <template v-if="item.status === 'finished'">
+        <img :src="item.url" />
+        <div class="demo-upload-list-cover">
+          <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
+          <Icon type="ios-trash-outline" @click.native="handleRemove(item)" v-if="!view"></Icon>
+        </div>
+      </template>
+    </div>
     <el-upload
       ref="files"
       :file-list="fujianfileList"
@@ -7,22 +16,40 @@
       :on-remove="handleRemove"
       :action="action"
       :data="data"
+      multiple
+      style="display: inline-block;width:58px;border:1px dashed #dcdee2;"
     >
-      <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>
+      <div style="width: 58px;height:58px;line-height: 58px;">
+        <i class="el-icon-upload" style="font-size:18px"></i>
+      </div>
     </el-upload>
   </div>
 </template>
 
 <script>
-import { uploadFile, deleteFile } from "@/api/file";
+import { uploadFile, deleteFile, getFileInfos } from "@/api/file";
 import { services } from "@/core/app/services";
+import { validate } from "@/core/mixins/";
 export default {
-  props: ["floder"],
+  mixins: [validate],
+  props: {
+    folder: {
+      type: String,
+      default: "",
+    },
+    files: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       fujianfileList: [],
       action: `${services.file.upload}`,
       data: {},
+      uploadList: [],
+      defaultList: [],
+      validate: false,
     };
   },
   mounted() {
@@ -30,9 +57,28 @@ export default {
       UserAccount: "admin",
       folder: this.floder,
     };
+    this.getFiles();
   },
   methods: {
-    getList() {},
+    async getFiles() {
+      this.uploadList = [];
+      this.defaultList = [];
+      if (this.files === "") {
+        setTimeout(() => {
+          this.uploadList = this.$refs.files.fileList;
+        }, 200);
+        return;
+      }
+      let params = {
+        fileIDs: this.files,
+      };
+      let response = await getFileInfos(params);
+      console.log(response);
+
+      // if(response){
+
+      // }
+    },
     async handleRemove(file) {
       let params = {
         UserAccount: "admin",
@@ -53,5 +99,41 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.demo-upload-list {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  margin-right: 4px;
+}
+.demo-upload-list img {
+  width: 100%;
+  height: 100%;
+}
+.demo-upload-list-cover {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+.demo-upload-list:hover .demo-upload-list-cover {
+  display: block;
+}
+.demo-upload-list-cover i {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 2px;
+}
 </style>

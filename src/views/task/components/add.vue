@@ -176,7 +176,6 @@ export default {
       let response = await addTask(this.formData);
       if (response.status === 1) {
         let addFlowableTaskSuccess = await this.addFlowableTask();
-        debugger;
 
         if (addFlowableTaskSuccess === 1) {
           this.$emit("on-success");
@@ -219,7 +218,6 @@ export default {
           },
         ],
       };
-      debugger
       return _this.$flowableClient.processInstances
         .addMultiInstanceExecution(processId, executionRequest)
         .then((response) => {

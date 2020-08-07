@@ -131,7 +131,6 @@ export default {
 
       if (response.status === 1) {
         this.startProcess().then(resp2 => {
-          debugger
           if (resp2 === 1) {
             this.$message.success("创建成功！");
             this.$emit("on-success");

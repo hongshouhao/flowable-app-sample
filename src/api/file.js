@@ -21,3 +21,11 @@ export function deleteFile(query) {
         params: query
     });
 }
+
+//获取文件信息
+export function getFileInfos(query) {
+    return get({
+        url: `${services.file.infos}`,
+        query: query
+    });
+}

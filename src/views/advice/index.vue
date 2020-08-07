@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="getList" plain>查询</el-button>
+          <el-button type="primary" @click="getAdviceStatus" plain>查询</el-button>
           <el-button type="success" @click="drawerVisible=true" plain>创建要求</el-button>
           <el-button type="warning" @click="exportExcel" plain>导出</el-button>
         </el-form-item>

@@ -10,12 +10,16 @@
         <span slot="title">建议列表</span>
       </el-menu-item>
       <el-menu-item index="task">
-        <i class="el-icon-setting"></i>
+        <i class="el-icon-c-scale-to-original"></i>
         <span slot="title">任务列表</span>
       </el-menu-item>
       <el-menu-item index="project">
-        <i class="el-icon-s-claim"></i>
+        <i class="el-icon-finished"></i>
         <span slot="title">项目组预设</span>
+      </el-menu-item>
+      <el-menu-item index="config">
+        <i class="el-icon-setting"></i>
+        <span slot="title">超时配置</span>
       </el-menu-item>
     </el-menu>
   </div>

@@ -77,7 +77,7 @@ export default {
   watch: {},
   created() {},
   mounted() {
-    this.$flowable.logout();
+    // this.$flowable.logout();
     this.returnUrl = this.$route.query.returnUrl || "/";
     sessionStorage.removeItem("login-" + appId);
     sessionStorage.removeItem("roles-" + appId);
@@ -144,15 +144,12 @@ export default {
 
     //流程登录
     async process() {
-      return await this.$flowable
-        .login(this.formData.username, this.formData.pwd)
-        .then((username) => {
-          return 1;
-        })
-        .catch((error) => {
-          console.log(error);
-          return 0;
-        });
+      let response = await this.$flowable.login(
+        this.formData.username,
+        this.formData.pwd
+      );
+      if (response) return 1;
+      else return 0;
     },
   },
 };

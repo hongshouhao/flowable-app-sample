@@ -50,6 +50,8 @@ export const services = {
   file: {
     upload: `http://${IP}/onemapsrv/UploadFiles?appid=${appId}`,
     dir: `http://${IP}/onemapsrv/Ext/DirAndFile`,
+    view: `http://${IP}/onemapsrv/DownloadFile?appid=${appId}`,
+    infos: `http://${IP}/onemapsrv/DownloadFilesInfo?appid=${appId}`,
     vector_export: `http://${IP}/onemapsrv/GetBQueryExport?appid=${appId}&Servicename=`,
     vector_import: `http://${IP}/onemapsrv/ResolveGisFile?appid=${appId}`,
   },

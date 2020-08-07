@@ -18,14 +18,12 @@ export default {
   methods: {
     setValues (procDefKey, formFields) {
       this.value = convert.to(formFields)
-      console.log(this.value)
       const formJsonFile = `/forms/${procDefKey}/${formFields.key.replace(
         '.form',
         ''
       )}.v${formFields.version}.json`
       this.$http.get(formJsonFile).then(response => {
         this.metadata = response.data
-        console.log(this.metadata)
       })
     },
     getValues () {
