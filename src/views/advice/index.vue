@@ -49,7 +49,7 @@
     ></el-pagination>
 
     <el-drawer title="创建初步要求" :visible.sync="drawerVisible" size="450px" :wrapperClosable="false">
-      <add-advice v-if="drawerVisible" @on-success="getList()"></add-advice>
+      <add-advice v-if="drawerVisible" @on-success="getAdviceStatus()"></add-advice>
     </el-drawer>
   </div>
 </template>
@@ -104,7 +104,7 @@ export default {
     //翻页
     handleCurrentChange(page) {
       this.formInline.page = page;
-      this.getList();
+      this.getAdviceStatus();
     },
 
     //跳转至详情页面
@@ -135,6 +135,12 @@ export default {
             status: item.name,
             id: variable[0].value,
           });
+      });
+      console.log(this.statusList);
+      this.statusList.forEach((item) => {
+        if (item.id == "75509a10-45c1-4edf-8d49-a885933e1f1b") {
+          console.log(item);
+        }
       });
 
       this.getList();

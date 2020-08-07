@@ -6,6 +6,7 @@
       <el-rate v-model="analysis.xypf" show-score disabled text-color="#ff9900"></el-rate>
     </el-col>
     <el-col :span="24">效益分析：{{analysis.xyfx}}</el-col>
+    <el-col :span="24">附件：</el-col>
   </el-row>
 </template>
 

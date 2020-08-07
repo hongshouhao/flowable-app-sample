@@ -12,13 +12,19 @@
       >提出时间：{{adviceInfo.createTime.parseTime("yyyy-MM-dd")}}</el-col>
       <el-col :span="24">描述：{{adviceInfo.ms}}</el-col>
       <el-col :span="24">备注：{{adviceInfo.bz}}</el-col>
+      <el-col :span="24">
+        附件：
+        <upload-view folder="chubufenxi"></upload-view>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import UploadView from "../../components/uploadView";
 export default {
   props: ["adviceInfo"],
+  components: { UploadView },
 };
 </script>
 

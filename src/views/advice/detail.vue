@@ -35,12 +35,10 @@
         <second-info :data="reviewInfo"></second-info>
       </el-collapse-item>
     </el-collapse>
-    <div class="btn-group" v-show="btnGrpVisible">
-      <el-button type="primary" v-show="stage=='1'" plain @click="cbfxVisible=true">提交初步分析</el-button>
-      <el-button type="primary" v-show="stage=='2'" plain @click="rwcfVisible=true">任务拆分</el-button>
-      <el-button type="primary" v-show="stage=='3'" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" v-show="stage=='4'" plain @click="submitMainTask()">核定</el-button>
-      <el-button type="primary" v-show="stage=='5'" plain @click="submitSecondReview">提交指派</el-button>
+    <div class="btn-group" v-show="stage>0">
+      <el-button type="primary" v-show="stage==1" plain @click="cbfxVisible=true">提交初步分析</el-button>
+      <el-button type="primary" v-show="stage==2" plain @click="rwcfVisible=true">任务拆分</el-button>
+      <el-button type="primary" v-show="stage==3" plain @click="submitMainTask()">核定</el-button>
     </div>
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
@@ -286,6 +284,9 @@ export default {
               x.name === "任务拆分" ||
               x.name === "项目审核"
           )[0];
+          console.log(this.flowableMainTask);
+
+          //判断为任务审核节点
           this.flowableTasks = myTasks.filter(
             (x) => /*x.name === "填写进度" ||*/ x.name === "任务审核"
           );
@@ -293,11 +294,11 @@ export default {
             this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
             //根据节点设置按钮
             if (this.flowableMainTask.name === "提交需求及效益分析") {
-              this.stage = "1";
+              this.stage = 1;
             } else if (this.flowableMainTask.name === "任务拆分") {
-              this.stage = "2";
+              this.stage = 2;
             } else if (this.flowableMainTask.name === "项目审核") {
-              this.stage = "4";
+              this.stage = 3;
             }
           } else {
             this.btnGrpVisible = false;

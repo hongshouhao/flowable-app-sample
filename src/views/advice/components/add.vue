@@ -183,6 +183,7 @@ export default {
     this.prodef = this.$store.state.processDefinitions.find(
       (x) => x.key === "szsp-service-improve2"
     );
+    console.log(this.prodef);
   },
   methods: {
     async gen() {
@@ -194,23 +195,11 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.add();
+        this.addAdvice();
       });
     },
 
     //添加建议
-    async add() {
-      let response = await this.startProcess();
-      if (response === 1) {
-        this.addAdvice();
-      } else if (response === 0) {
-        this.$message.error("流程启动失败，请联系开发人员！");
-      } else if (response === -1) {
-        this.$message.error("流程定义不存在，请联系开发人员！");
-      }
-    },
-
-    //业务操作
     async addAdvice() {
       this.formData.creator = this._userName;
       this.formData.creatorID = this._userId;
@@ -218,8 +207,15 @@ export default {
       let response = null;
       response = await addAdvice(this.formData);
       if (response.code == 200) {
-        this.$emit("on-success");
-        this.$message.success("创建成功！");
+        let process = await this.startProcess();
+        if (process === 1) {
+          this.$emit("on-success");
+          this.$message.success("创建成功！");
+        } else if (process === 0) {
+          this.$message.error("流程启动失败，请联系开发人员！");
+        } else if (process === -1) {
+          this.$message.error("流程定义不存在，请联系开发人员！");
+        }
       } else {
         this.$message.error("保存失败，请重新检查。");
       }
@@ -239,7 +235,13 @@ export default {
             .startProcessInstance({
               processDefinitionId: this.prodef.id,
               businessKey: this.formData.adviceID,
-              variables: [],
+              variables: [
+                {
+                  name: "businessKey",
+                  type: "string",
+                  value: this.formData.adviceID,
+                },
+              ],
               returnVariables: true,
             })
             .then((result) => {

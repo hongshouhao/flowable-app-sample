@@ -1,35 +1,29 @@
 <template>
   <div>
-    <el-form ref="elForm"
-             :model="formData"
-             :rules="rules"
-             size="medium"
-             label-width="100px">
-      <el-form-item label="需求架构"
-                    prop="xqjg">
-        <el-input v-model="formData.xqjg"
-                  type="textarea"
-                  placeholder="请输入需求架构"
-                  :autosize="{minRows: 4, maxRows: 4}"
-                  :style="{width: '100%'}"></el-input>
+    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+      <el-form-item label="需求架构" prop="xqjg">
+        <el-input
+          v-model="formData.xqjg"
+          type="textarea"
+          placeholder="请输入需求架构"
+          :autosize="{minRows: 4, maxRows: 4}"
+          :style="{width: '100%'}"
+        ></el-input>
       </el-form-item>
-      <el-form-item label="效益评分"
-                    prop="xypf">
-        <el-rate v-model="formData.xypf"
-                 :max="5"
-                 show-score></el-rate>
+      <el-form-item label="效益评分" prop="xypf">
+        <el-rate v-model="formData.xypf" :max="5" show-score></el-rate>
       </el-form-item>
-      <el-form-item label="效益分析"
-                    prop="xyfx">
-        <el-input v-model="formData.xyfx"
-                  type="textarea"
-                  placeholder="请输入效益分析"
-                  :autosize="{minRows: 4, maxRows: 4}"
-                  :style="{width: '100%'}"></el-input>
+      <el-form-item label="效益分析" prop="xyfx">
+        <el-input
+          v-model="formData.xyfx"
+          type="textarea"
+          placeholder="请输入效益分析"
+          :autosize="{minRows: 4, maxRows: 4}"
+          :style="{width: '100%'}"
+        ></el-input>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary"
-                   @click="submitForm">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -42,12 +36,12 @@ export default {
   props: {
     flowableTaskId: {
       type: String,
-      default () {
+      default() {
         return "";
       },
     },
   },
-  data () {
+  data() {
     return {
       formData: {
         xqjg: undefined,
@@ -69,10 +63,10 @@ export default {
   },
   computed: {},
   watch: {},
-  created () { },
-  mounted () { },
+  created() {},
+  mounted() {},
   methods: {
-    submitForm () {
+    submitForm() {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
@@ -81,12 +75,12 @@ export default {
     },
 
     //重置
-    resetForm () {
+    resetForm() {
       this.$refs["elForm"].resetFields();
     },
 
     //业务
-    async addAnalysis () {
+    async addAnalysis() {
       let response = null;
       this.formData.adviceid = this.$route.query.adviceID;
       this.formData.creator = "总集";
@@ -95,44 +89,33 @@ export default {
         let execSuccess = await this.excuFlowableTask();
         if (execSuccess === 1) {
           this.$emit("on-success");
-          this.$message({
-            showClose: true,
-            message: "创建成功！",
-            type: "success",
-          });
+          this.$message.success("创建成功！");
         } else {
-          this.$message({
-            showClose: true,
-            message: "任务提交失败",
-            type: "error",
-          });
+          this.$message.error("任务流程提交失败，请联系管理员");
         }
       } else {
-        this.$message({
-          showClose: true,
-          message: "保存失败，请重新检查。",
-          type: "error",
-        });
+        this.$message.error("保存失败，请重新检查。");
       }
     },
 
-
     //流程
-    async excuFlowableTask () {
+    async excuFlowableTask() {
+      // let taskActionRequest = {
+      //   action: "complete",
+      //   variables: [],
+      //   localScope: false,
+      // };
+
       let taskActionRequest = {
-        action: "complete",
-        variables: [],
-        localScope: false,
+        action: "claim",
+        assignee: this.$flowableClient.options.auth.username,
       };
+      console.log(this.flowableTaskId);
 
       return await this.$flowableClient.tasks
         .executeAction(this.flowableTaskId, taskActionRequest)
         .then((resp) => {
           return 1;
-        })
-        .catch((err) => {
-          console.error(err);
-          return 0;
         })
         .catch((err) => {
           console.error(err);
