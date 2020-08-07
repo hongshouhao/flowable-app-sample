@@ -8,6 +8,7 @@ function IdentityUsersResource (options, http) {
   }
 
   this.getUser = (userId) => {
+    debugger
     return http.get(resourcePath + `/${userId}`)
   }
 }

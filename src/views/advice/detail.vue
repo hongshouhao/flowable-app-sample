@@ -35,14 +35,12 @@
         <second-info :data="reviewInfo"></second-info>
       </el-collapse-item>
     </el-collapse>
-    <div class="btn-group" v-show="stage>0">
-      <el-button type="primary" v-show="stage==1" plain @click="cbfxVisible=true">提交初步分析</el-button>
-      <el-button type="primary" v-show="stage==2" plain @click="rwcfVisible=true">任务拆分</el-button>
-      <el-button type="primary" v-show="stage==3" plain @click="submitSecondReview">提交复核</el-button>
-      <el-button type="primary" v-show="stage==4" plain @click="submitMainTask()">核定</el-button>
-      <el-button type="primary" v-show="stage==5" plain @click="submitSecondReview">提交指派</el-button>
-
-      <el-button type="primary" plain @click="diagramVisible=true">流程圖</el-button>
+    <div class="btn-group" v-show="btnGrpVisible">
+      <el-button type="primary" v-show="stage=='1'" plain @click="cbfxVisible=true">提交初步分析</el-button>
+      <el-button type="primary" v-show="stage=='2'" plain @click="rwcfVisible=true">任务拆分</el-button>
+      <el-button type="primary" v-show="stage=='3'" plain @click="submitSecondReview">提交复核</el-button>
+      <el-button type="primary" v-show="stage=='4'" plain @click="submitMainTask()">核定</el-button>
+      <el-button type="primary" v-show="stage=='5'" plain @click="submitSecondReview">提交指派</el-button>
     </div>
     <el-drawer title="初步分析" :visible.sync="cbfxVisible" size="450px" :wrapperClosable="false">
       <add-analysis v-if="cbfxVisible" :flowableTaskId="flowableTaskId" @on-success="init()"></add-analysis>
@@ -301,10 +299,10 @@ export default {
             } else if (this.flowableMainTask.name === "项目审核") {
               this.stage = "4";
             }
+          } else {
+            this.btnGrpVisible = false;
           }
         }
-      } else {
-        this.$message.error("流程获取失败，请联系管理员！");
       }
     },
   },
