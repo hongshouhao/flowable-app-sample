@@ -7,10 +7,9 @@ function IdentityUsersResource(options, http) {
         return http.get(resourcePath)
     }
 
-    this.getUser = (userId) => {
-
-        return http.get(resourcePath + `/${userId}`)
-    }
+  this.getUser = (userId) => {
+    return http.get(resourcePath + `/${userId}`)
+  }
 }
 
 module.exports = IdentityUsersResource

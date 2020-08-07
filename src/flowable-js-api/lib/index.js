@@ -20,43 +20,33 @@ const FormsResource = require('./forms')
 
 const flowableRestEndpoint = '/flowable-rest/service'
 
-function flowable(options) {
-    let user = options.auth
-    const httpClient = axios.create({
-        baseURL: getBaseUrlWithCredentials(options) + flowableRestEndpoint,
-        originBaseURL: options.apiUri + flowableRestEndpoint,
-        timeout: options.timeout || 0,
-        headers: {
-            'content-type': 'application/json' /*, 'authorization': 'Basic YWRtaW46YWRtaW4=' */
-        },
-        withCredentials: false,
-        // auth: {
-        //   username: user.username,
-        //   password: user.password
-        // },
-        auth: {
-            username: 'zongji',
-            password: 'admin'
-        }
-    })
-    return {
-        processDefinitions: new ProcessDefinitionsResource(options, httpClient),
-        processInstances: new ProcessInstancesResource(options, httpClient),
-        processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
-        historicprocessInstances: new HistoricProcessInstancesResource(options, httpClient),
+function flowable (options) {
+  const httpClient = axios.create({
+    baseURL: getBaseUrlWithCredentials(options) + flowableRestEndpoint,
+    originBaseURL: options.apiUri + flowableRestEndpoint,
+    timeout: options.timeout || 0,
+    headers: { 'content-type': 'application/json'/*, 'authorization': 'Basic YWRtaW46YWRtaW4=' */ },
+    withCredentials: false,
+    auth: options.auth
+  })
 
-        // processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
-        tasks: new TasksResource(options, httpClient),
-        taskVariables: new TaskVariablesResource(options, httpClient),
-        taskIdentityLinks: new TaskIdentityLinksResource(options, httpClient),
-        taskComments: new TaskCommentsResource(options, httpClient),
-        historicTaskInstances: new HistoricPTaskInstancesResource(options, httpClient),
+  return {
+    processDefinitions: new ProcessDefinitionsResource(options, httpClient),
+    processInstances: new ProcessInstancesResource(options, httpClient),
+    processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
+    historicprocessInstances: new HistoricProcessInstancesResource(options, httpClient),
 
-        identityUsers: new IdentityUserResource(options, httpClient),
-        forms: new FormsResource(options, httpClient),
-        histories: new HistoricResource(options, httpClient),
-        options: options
-    }
+    tasks: new TasksResource(options, httpClient),
+    taskVariables: new TaskVariablesResource(options, httpClient),
+    taskIdentityLinks: new TaskIdentityLinksResource(options, httpClient),
+    taskComments: new TaskCommentsResource(options, httpClient),
+    historicTaskInstances: new HistoricPTaskInstancesResource(options, httpClient),
+
+    identityUsers: new IdentityUserResource(options, httpClient),
+    forms: new FormsResource(options, httpClient),
+    histories: new HistoricResource(options, httpClient),
+    options: httpClient.defaults
+  }
 }
 
 /*
