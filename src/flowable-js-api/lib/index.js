@@ -36,7 +36,6 @@ function flowable (options) {
     processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
     historicprocessInstances: new HistoricProcessInstancesResource(options, httpClient),
 
-    // processInstanceVariables: new ProcessInstanceVariablesResource(options, httpClient),
     tasks: new TasksResource(options, httpClient),
     taskVariables: new TaskVariablesResource(options, httpClient),
     taskIdentityLinks: new TaskIdentityLinksResource(options, httpClient),
@@ -46,7 +45,7 @@ function flowable (options) {
     identityUsers: new IdentityUserResource(options, httpClient),
     forms: new FormsResource(options, httpClient),
     histories: new HistoricResource(options, httpClient),
-    options: options
+    options: httpClient.defaults
   }
 }
 

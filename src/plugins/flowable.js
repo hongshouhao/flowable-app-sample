@@ -23,10 +23,9 @@ class Flowable {
     this.login = function (username, password) {
       this.api.options.auth.username = username
       this.api.options.auth.password = password
-      debugger
+
       return this.api.identityUsers.getUser(username)
         .then(result => {
-          debugger
           let user = result.data
           if (user) {
             user.authdata = window.btoa(username + ":" + password);
@@ -34,7 +33,6 @@ class Flowable {
           }
           return Promise.resolve(user);
         }).catch(e => {
-          debugger
           if (e.status === 401) {
             this.logout();
             window.location.reload(true);
