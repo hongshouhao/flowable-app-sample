@@ -79,6 +79,7 @@ export default {
     this.getAdviceStatus();
   },
   methods: {
+    //刷新表格数据
     async getList() {
       this.drawerVisible = false;
       let response = await getAdviceList(this.formInline);
@@ -99,16 +100,22 @@ export default {
         }
       } else this.$message.error("查询失败，请检查网络！");
     },
+
+    //翻页
     handleCurrentChange(page) {
       this.formInline.page = page;
       this.getList();
     },
+
+    //跳转至详情页面
     rowClick(row) {
       this.$router.push({
         path: "/advice/detail",
         query: { adviceID: row.adviceID },
       });
     },
+
+    //获取所有数据的流程
     async getAdviceStatus() {
       let rsp = await this.$flowableClient.tasks.queryTasks({
         processDefinitionKey: "szsp-service-improve2",

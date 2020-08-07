@@ -107,7 +107,6 @@ const router = new Router({
 router.beforeEach(async (to, from, next) => {
   if (to.meta.auth) {
     let session = sessionStorage.getItem(`login-${appId}`);
-    console.log(appId)
     if (session) next();
     else next("/login");
   } else next();

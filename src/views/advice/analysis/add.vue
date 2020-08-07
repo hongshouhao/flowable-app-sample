@@ -73,10 +73,13 @@ export default {
         this.add();
       });
     },
+
+    //重置
     resetForm() {
       this.$refs["elForm"].resetFields();
     },
 
+    //添加初步分析
     async add() {
       let response = await this.excuFlowableTask();
       if (response === 1) {
@@ -85,6 +88,8 @@ export default {
         this.$message.error("流程启动失败，请联系管理员");
       }
     },
+
+    //业务
     async addAnalysis() {
       let response = null;
       this.formData.adviceid = this.$route.query.adviceID;
@@ -97,6 +102,8 @@ export default {
         this.$message.error("保存失败，请重新检查。");
       }
     },
+
+    //流程
     async excuFlowableTask() {
       let taskActionRequest = {
         action: "complete",
