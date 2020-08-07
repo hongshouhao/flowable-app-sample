@@ -1,24 +1,39 @@
 <template>
-  <el-form size="small" label-position="left" label-width="0px" class="login-container">
+  <el-form size="small"
+           label-position="left"
+           label-width="0px"
+           class="login-container">
     <h2>Login</h2>
     <el-form-item :rules="[{ required: true, message: '必填' }]">
-      <el-input v-model="username" placeholder="账号"></el-input>
+      <el-input v-model="username"
+                placeholder="账号"></el-input>
     </el-form-item>
 
     <el-form-item :rules="[{ required: true, message: '必填' }]">
-      <el-input type="password" v-model="password" autocomplete="off" placeholder="密码"></el-input>
+      <el-input type="password"
+                v-model="password"
+                autocomplete="off"
+                placeholder="密码"></el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+    <el-checkbox v-model="checked"
+                 checked
+                 class="remember">记住密码</el-checkbox>
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" :loading="loading" @click="handleSubmit">登录</el-button>
+      <el-button type="primary"
+                 style="width:100%;"
+                 :loading="loading"
+                 @click="handleSubmit">登录</el-button>
     </el-form-item>
-    <el-alert v-if="error" :title="error" type="error" show-icon></el-alert>
+    <el-alert v-if="error"
+              :title="error"
+              type="error"
+              show-icon></el-alert>
   </el-form>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       username: "",
       password: "",
@@ -27,12 +42,12 @@ export default {
       error: "",
     };
   },
-  created() {
+  created () {
     this.$flowable.logout();
     this.returnUrl = this.$route.query.returnUrl || "/";
   },
   methods: {
-    handleSubmit() {
+    handleSubmit () {
       if (!(this.username && this.password)) {
         return;
       }

@@ -129,19 +129,21 @@ export default {
     },
     async rowClick (row) {
       let flowableTaskId = ''
-
+      debugger
       for (let i = 0; i < this.flowableTasks.length; i++) {
         const bizKey = this.flowableTasks[i].variables.find(x => x.name === 'businessKey');
-        if (bizKey) {
-          if (bizKey.value === row.taskID) {
-            flowableTaskId = this.flowableTasks[i].id;
-            break;
-          }
+        if (bizKey && bizKey.value === row.taskID) {
+          flowableTaskId = this.flowableTasks[i].id;
+          break;
         }
         else {
-          debugger
-          const bizTaskId = await this.$flowableClient.taskVariables
-            .getVariable(this.flowableTasks[i].id, "taskId")
+          let bizTaskId = undefined
+          try {
+            bizTaskId = await this.$flowableClient.taskVariables
+              .getVariable(this.flowableTasks[i].id, "taskId")
+          } catch (e) {
+            continue;
+          }
           debugger
           if (bizTaskId.data.value === row.taskID) {
             flowableTaskId = this.flowableTasks[i].id;
@@ -163,16 +165,16 @@ export default {
     },
     getMyTask () {
       let _this = this;
-      debugger;
-
       let username = this.$flowableClient.options.auth.username;
       this.$flowableClient.tasks
         .queryTasks({
-          candidateOrAssigned: username,
+          // candidateOrAssigned: username,
           includeTaskLocalVariables: true,
           includeProcessVariables: true,
+          size: 9999
         })
         .then((tasks) => {
+          debugger
           this.flowableTasks = tasks.data.data.filter(
             (x) => x.name === "填写进度" || x.name === "提交需求" || x.name === '上传成果' || x.name === "任务实施审核"
           );

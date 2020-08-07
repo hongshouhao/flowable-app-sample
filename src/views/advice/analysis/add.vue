@@ -1,29 +1,35 @@
 <template>
   <div>
-    <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-      <el-form-item label="需求架构" prop="xqjg">
-        <el-input
-          v-model="formData.xqjg"
-          type="textarea"
-          placeholder="请输入需求架构"
-          :autosize="{minRows: 4, maxRows: 4}"
-          :style="{width: '100%'}"
-        ></el-input>
+    <el-form ref="elForm"
+             :model="formData"
+             :rules="rules"
+             size="medium"
+             label-width="100px">
+      <el-form-item label="需求架构"
+                    prop="xqjg">
+        <el-input v-model="formData.xqjg"
+                  type="textarea"
+                  placeholder="请输入需求架构"
+                  :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
       </el-form-item>
-      <el-form-item label="效益评分" prop="xypf">
-        <el-rate v-model="formData.xypf" :max="5" show-score></el-rate>
+      <el-form-item label="效益评分"
+                    prop="xypf">
+        <el-rate v-model="formData.xypf"
+                 :max="5"
+                 show-score></el-rate>
       </el-form-item>
-      <el-form-item label="效益分析" prop="xyfx">
-        <el-input
-          v-model="formData.xyfx"
-          type="textarea"
-          placeholder="请输入效益分析"
-          :autosize="{minRows: 4, maxRows: 4}"
-          :style="{width: '100%'}"
-        ></el-input>
+      <el-form-item label="效益分析"
+                    prop="xyfx">
+        <el-input v-model="formData.xyfx"
+                  type="textarea"
+                  placeholder="请输入效益分析"
+                  :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="primary"
+                   @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -36,12 +42,12 @@ export default {
   props: {
     flowableTaskId: {
       type: String,
-      default() {
+      default () {
         return "";
       },
     },
   },
-  data() {
+  data () {
     return {
       formData: {
         xqjg: undefined,
@@ -63,20 +69,20 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
-  mounted() {},
+  created () { },
+  mounted () { },
   methods: {
-    submitForm() {
+    submitForm () {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
         this.addAnalysis();
       });
     },
-    resetForm() {
+    resetForm () {
       this.$refs["elForm"].resetFields();
     },
-    async addAnalysis() {
+    async addAnalysis () {
       let response = null;
       this.formData.adviceid = this.$route.query.adviceID;
       this.formData.creator = "总集";
@@ -105,12 +111,13 @@ export default {
         });
       }
     },
-    async excuFlowableTask() {
+    async excuFlowableTask () {
       let taskActionRequest = {
         action: "complete",
         variables: [],
         localScope: false,
       };
+
       return await this.$flowableClient.tasks
         .executeAction(this.flowableTaskId, taskActionRequest)
         .then((resp) => {
