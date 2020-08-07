@@ -34,6 +34,8 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 
+
+
 let vue = new Vue({
   router,
   store,

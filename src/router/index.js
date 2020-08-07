@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {
+  appId
+} from "../core/app/app"
 
 Vue.use(Router)
 const originalPush = Router.prototype.push
@@ -19,7 +22,8 @@ const router = new Router({
           path: '/index',
           name: 'index',
           meta: {
-            title: '首页'
+            title: '首页',
+            auth: true
           },
           component: () => import('@/views/home/index.vue')
         },
@@ -27,7 +31,8 @@ const router = new Router({
           path: '/advice',
           name: 'advice',
           meta: {
-            title: '建议列表'
+            title: '建议列表',
+            auth: true
           },
           component: () => import('@/views/advice/index.vue'),
         },
@@ -35,7 +40,8 @@ const router = new Router({
           path: '/advice/detail',
           name: 'advice',
           meta: {
-            title: '建议详情'
+            title: '建议详情',
+            auth: true
           },
           component: () => import('@/views/advice/detail.vue'),
         },
@@ -43,7 +49,8 @@ const router = new Router({
           path: '/task',
           name: 'task',
           meta: {
-            title: '任务列表'
+            title: '任务列表',
+            auth: true
           },
           component: () => import('@/views/task/index.vue')
         },
@@ -51,7 +58,8 @@ const router = new Router({
           path: '/task/detail',
           name: 'task',
           meta: {
-            title: '任务详情'
+            title: '任务详情',
+            auth: true
           },
           component: () => import('@/views/task/detail.vue'),
         },
@@ -59,7 +67,8 @@ const router = new Router({
           path: '/project',
           name: 'project',
           meta: {
-            title: '项目组预设'
+            title: '项目组预设',
+            auth: true
           },
           component: () => import('@/views/project/index.vue')
         },
@@ -86,30 +95,22 @@ const router = new Router({
       path: '/login',
       name: 'login',
       meta: {
-        title: '登录'
+        title: '登录',
+        auth: false
       },
       component: () => import('@/views/login/index.vue')
     },
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-// const publicPages = ['/login'];
-// const publicPages = ['/'];
-// const authRequired = !publicPages.includes(to.path);
-// const loggedIn = localStorage.getItem('user');
-
-// if (authRequired && !loggedIn) {
-// return next({
-// path: '/login',
-// path: '/',
-// query: {
-// returnUrl: to.path
-// }
-// });
-// }
-
-// next();
-// })
+//路由授权重定向
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.auth) {
+    let session = sessionStorage.getItem(`login-${appId}`);
+    console.log(appId)
+    if (session) next();
+    else next("/login");
+  } else next();
+});
 
 export default router
