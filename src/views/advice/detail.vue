@@ -281,7 +281,6 @@ export default {
       });
       if (response.status === 200) {
         let myTasks = response.data.data;
-        console.log(myTasks);
         if (myTasks.length > 0) {
           this.flowableMainTask = myTasks.filter(
             (x) =>
@@ -307,37 +306,6 @@ export default {
       } else {
         this.$message.error("流程获取失败，请联系管理员！");
       }
-      // if (tasks) {
-      //   let myTasks = tasks.data.data;
-      //   if (myTasks.length === 0) {
-      //     _this.btnGrpVisible = false;
-      //   } else {
-      //     _this.btnGrpVisible = true;
-      //     _this.flowableMainTask = myTasks.filter(
-      //       (x) =>
-      //         x.name === "提交需求及效益分析" ||
-      //         x.name === "任务拆分" ||
-      //         x.name === "项目审核"
-      //     )[0];
-      //     _this.flowableTasks = myTasks.filter(
-      //       (x) => /*x.name === "填写进度" ||*/ x.name === "任务审核"
-      //     );
-      //     console.log(_this.flowableMainTask.name);
-      //     if (_this.flowableMainTask) {
-      //       _this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
-      //       //根据节点设置按钮
-      //       if (_this.flowableMainTask.name === "提交需求及效益分析") {
-      //         _this.stage = "1";
-      //       } else if (_this.flowableMainTask.name === "任务拆分") {
-      //         _this.stage = "2";
-      //       } else if (_this.flowableMainTask.name === "项目审核") {
-      //         _this.stage = "4";
-      //       }
-      //     } else {
-      //       _this.btnGrpVisible = false;
-      //     }
-      //   }
-      // }
     },
   },
 };
