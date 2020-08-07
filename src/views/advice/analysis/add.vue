@@ -76,12 +76,16 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.add();
+        this.addAnalysis();
       });
     },
+
+    //重置
     resetForm () {
       this.$refs["elForm"].resetFields();
     },
+
+    //业务
     async addAnalysis () {
       let response = null;
       this.formData.adviceid = this.$route.query.adviceID;
@@ -111,6 +115,9 @@ export default {
         });
       }
     },
+
+
+    //流程
     async excuFlowableTask () {
       let taskActionRequest = {
         action: "complete",

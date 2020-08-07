@@ -65,10 +65,12 @@
   </div>
 </template>
 <script>
+import { validate } from "@/core/mixins/";
 import { guid } from "@/core/utils";
 import { getAdviceCode, addAdvice } from "@/api/advice";
 import UploadView from "../../components/uploadView";
 export default {
+  mixins: [validate],
   components: { UploadView },
   props: [],
   data() {
@@ -171,6 +173,7 @@ export default {
           value: "非常紧急",
         },
       ],
+      validate: false,
     };
   },
   computed: {},
@@ -191,25 +194,11 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        // this.addAdvice().then((resp1) => {
-        //   if (resp1 === 1) {
-        //     this.startProcess().then((resp2) => {
-        //       if (resp2 === 1) {
-        //         this.$emit("on-success");
-        //         this.$message.success("创建成功！");
-        //       } else if (resp2 === 0) {
-        //         this.$message.error("流程启动失败！");
-        //       } else if (resp2 === -1) {
-        //         this.$message.error("流程定义不存在，请联系开发人员！");
-        //       }
-        //     });
-        //   } else {
-        //     this.$message.error("保存失败，请重新检查。");
-        //   }
-        // });
         this.add();
       });
     },
+
+    //添加建议
     async add() {
       let response = await this.startProcess();
       if (response === 1) {
@@ -220,8 +209,11 @@ export default {
         this.$message.error("流程定义不存在，请联系开发人员！");
       }
     },
+
+    //业务操作
     async addAdvice() {
-      this.formData.creator = "总集";
+      this.formData.creator = this._userName;
+      this.formData.creatorID = this._userId;
       this.formData.adviceID = guid();
       let response = null;
       response = await addAdvice(this.formData);
@@ -232,6 +224,8 @@ export default {
         this.$message.error("保存失败，请重新检查。");
       }
     },
+
+    //流程操作
     async startProcess() {
       if (this.prodef) {
         let theProcs = await this.$flowableClient.processInstances.getProcessInstances(

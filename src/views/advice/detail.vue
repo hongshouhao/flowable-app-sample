@@ -62,10 +62,6 @@
                  v-show="stage=='5'"
                  plain
                  @click="submitSecondReview">提交指派</el-button>
-
-      <el-button type="primary"
-                 plain
-                 @click="diagramVisible=true">流程圖</el-button>
     </div>
     <el-drawer title="初步分析"
                :visible.sync="cbfxVisible"
@@ -134,7 +130,7 @@ export default {
   data () {
     return {
       validate: false,
-      stage: "0",
+      stage: 0,
       openNames: ["1", "2", "3", "4"],
       cbfxVisible: false,
       rwcfVisible: false,
@@ -303,53 +299,45 @@ export default {
       done();
     },
 
-    getMyTask () {
-      debugger
-      let _this = this;
-      let username = _this.$flowableClient.options.auth.username;
-      _this.$flowableClient.tasks
-        .queryTasks({
-          candidateGroups: _this._role,
-          candidateOrAssigned: username,
-          processInstanceBusinessKey: _this.$route.query.adviceID,
-          includeTaskLocalVariables: true,
-          includeProcessVariables: true,
-        })
-        .then((tasks) => {
-          debugger
-          let myTasks = tasks.data.data;
-          if (myTasks.length === 0) {
-            _this.btnGrpVisible = false;
+    //获取流程
+    async getMyTask () {
+      let username = this.$flowableClient.options.auth.username;
+      let response = await this.$flowableClient.tasks.queryTasks({
+        candidateGroups: this._role,
+        candidateOrAssigned: username,
+        processInstanceBusinessKey: this.$route.query.adviceID,
+        includeTaskLocalVariables: true,
+        includeProcessVariables: true,
+      });
+      if (response.status === 200) {
+        let myTasks = response.data.data;
+        console.log(myTasks);
+        if (myTasks.length > 0) {
+          this.flowableMainTask = myTasks.filter(
+            (x) =>
+              x.name === "提交需求及效益分析" ||
+              x.name === "任务拆分" ||
+              x.name === "项目审核"
+          )[0];
+          this.flowableTasks = myTasks.filter(
+            (x) => /*x.name === "填写进度" ||*/ x.name === "任务审核"
+          );
+          if (this.flowableMainTask) {
+            this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
+            //根据节点设置按钮
+            if (this.flowableMainTask.name === "提交需求及效益分析") {
+              this.stage = "1";
+            } else if (this.flowableMainTask.name === "任务拆分") {
+              this.stage = "2";
+            } else if (this.flowableMainTask.name === "项目审核") {
+              this.stage = "4";            }
           } else {
-            _this.btnGrpVisible = true;
-            _this.flowableMainTask = myTasks.filter(
-              (x) =>
-                x.name === "提交需求及效益分析" ||
-                x.name === "任务拆分" ||
-                x.name === "项目审核"
-            )[0];
-            _this.flowableTasks = myTasks.filter(
-              (x) => /*x.name === "填写进度" ||*/ x.name === "任务审核"
-            );
-
-            if (this.flowableMainTask) {
-              _this.$store.state.currentProcessInstanceId = this.flowableMainTask.processInstanceId;
-              //根据节点设置按钮
-              if (_this.flowableMainTask.name === "提交需求及效益分析") {
-                _this.stage = "1";
-              } else if (_this.flowableMainTask.name === "任务拆分") {
-                _this.stage = "2";
-              } else if (_this.flowableMainTask.name === "项目审核") {
-                _this.stage = "4";
-              }
-            } else {
-              this.btnGrpVisible = false;
-            }
+            this.btnGrpVisible = false;
           }
-        });
-    },
-  },
-};
+        }
+      }    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .advice_detail {

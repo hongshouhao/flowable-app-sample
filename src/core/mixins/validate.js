@@ -12,6 +12,7 @@ export const validate = {
       _userAccount: "",
       _company: "",
       _role: "",
+      _userId: "",
       validate: false
     };
   },
@@ -28,7 +29,8 @@ export const validate = {
     this._userAccount = login.userAccount;
     this._isAdmin = login.isAdmin;
     this._company = login.company;
-    this._role = login.role
+    this._role = login.role;
+    this._userId = login.id;
     this.validate = true;
   }
 };
