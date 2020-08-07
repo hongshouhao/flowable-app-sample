@@ -24,7 +24,6 @@ export default {
   components: { MenuView, UserInfo },
   data() {
     return {
-      user: {},
       SysName: "苏州工业园区“一网通办”优化提升服务平台",
     };
   },

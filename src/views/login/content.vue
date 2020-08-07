@@ -16,9 +16,9 @@
             <i slot="prefix" class="el-input__icon el-icon-user"></i>
           </el-input>
         </el-form-item>
-        <el-form-item prop="password">
+        <el-form-item prop="pwd">
           <el-input
-            v-model="formData.password"
+            v-model="formData.pwd"
             placeholder="请输入密码"
             clearable
             show-password
@@ -28,8 +28,8 @@
             <i slot="prefix" class="el-input__icon el-icon-lock"></i>
           </el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-checkbox v-model="formData.remember">记住密码</el-checkbox>
+        <el-form-item>
+          <el-checkbox v-model="remember">记住密码</el-checkbox>
         </el-form-item>
       </el-form>
       <div class="login-btn">
@@ -39,6 +39,9 @@
   </el-card>
 </template>
 <script>
+import { userLogin, getUser } from "@/api/user";
+import { appId } from "@/core/app/app";
+import { encode, decode } from "@/core/utils/base64";
 export default {
   components: {},
   props: [],
@@ -48,9 +51,10 @@ export default {
       returnUrl: "",
       formData: {
         username: undefined,
-        password: undefined,
-        remember: false,
+        pwd: undefined,
       },
+      role: "",
+      remember: false,
       rules: {
         username: [
           {
@@ -59,7 +63,7 @@ export default {
             trigger: "blur",
           },
         ],
-        password: [
+        pwd: [
           {
             required: true,
             message: "请输入密码",
@@ -71,31 +75,84 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
+  created() {},
+  mounted() {
     this.$flowable.logout();
     this.returnUrl = this.$route.query.returnUrl || "/";
-    
+    sessionStorage.removeItem("login-" + appId);
+    sessionStorage.removeItem("roles-" + appId);
+    let remember = localStorage.getItem(appId + "-login-remember") || null;
+
+    if (remember !== null) {
+      this.remember = true;
+      var rememberInfo = decode(remember);
+      var userJson = JSON.parse(rememberInfo);
+      this.formData.username = userJson.username;
+      this.formData.pwd = userJson.pwd;
+    }
   },
-  mounted() {},
   methods: {
     submitForm() {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.loading = true;
-        console.log(this.formData.username);
-        console.log(this.formData.password);
-        this.$flowable
-          .login(this.formData.username, this.formData.password)
-          .then((user) => {
-            console.log(user);
-            this.$router.push(this.returnUrl);
-          })
-          .catch((error) => {
-            this.$message.error(error);
-            this.loading = false;
-          });
+        this.login();
       });
+    },
+
+    //登录
+    async login() {
+      let responce = await this.process();
+      if (responce === 1) {
+        this.checkLogin();
+      } else {
+        this.$message.error("流程获取失败，请联系管理员！");
+      }
+    },
+
+    //业务登录
+    async checkLogin() {
+      this.loading = true;
+      let response = await userLogin(this.formData);
+      if (response.status === 1) {
+        var jsonStr = JSON.stringify({
+          username: this.formData.username,
+          pwd: this.formData.pwd,
+        });
+        if (this.remember) {
+          localStorage.setItem(appId + "-login-remember", encode(jsonStr));
+        } else {
+          localStorage.removeItem(appId + "-login-remember");
+        }
+        let data = response.data.userInfo;
+        let rst = await getUser(data.id);
+        if (rst.data.length === 1) {
+          data.role = rst.data[0].name;
+          sessionStorage.setItem(
+            "login-" + appId,
+            encode(JSON.stringify(data))
+          );
+          this.$router.push(this.returnUrl);
+        } else {
+          this.$message.error("未获取到用户角色，请联系管理员！");
+        }
+      } else {
+        this.loading = false;
+        this.$message.error(response.message);
+      }
+    },
+
+    //流程登录
+    async process() {
+      return await this.$flowable
+        .login(this.formData.username, this.formData.pwd)
+        .then((username) => {
+          return 1;
+        })
+        .catch((error) => {
+          console.log(error);
+          return 0;
+        });
     },
   },
 };

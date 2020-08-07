@@ -5,7 +5,7 @@
     </div>
     <div class="detail">
       <el-avatar icon="el-icon-s-custom" style="background-color: #87d068" size="large"></el-avatar>
-      <p>欢迎登录，{{ name }}</p>
+      <p v-if="validate">欢迎登录，{{ _userName }}</p>
       <p>
         <span @click="changePasswdShown=true">[ 修改密码 ]</span>
         <span @click="exit">[ 注销 ]</span>
@@ -15,15 +15,16 @@
   </div>
 </template>
 <script>
+import { validate } from "@/core/mixins/";
 import ChangePasswd from "./ChangePasswd";
 
 export default {
+  mixins: [validate],
   components: { ChangePasswd },
-
   data() {
     return {
+      validate: false,
       changePasswdShown: false,
-      name: "",
     };
   },
   methods: {

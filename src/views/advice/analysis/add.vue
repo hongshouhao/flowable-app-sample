@@ -76,7 +76,7 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.addAnalysis();
+        this.add();
       });
     },
     resetForm () {

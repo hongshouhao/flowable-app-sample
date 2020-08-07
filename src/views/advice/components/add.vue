@@ -191,23 +191,34 @@ export default {
       this.$refs["elForm"].validate((valid) => {
         if (!valid) return;
         // TODO 提交表单
-        this.addAdvice().then((resp1) => {
-          if (resp1 === 1) {
-            this.startProcess().then((resp2) => {
-              if (resp2 === 1) {
-                this.$emit("on-success");
-                this.$message.success("创建成功！");
-              } else if (resp2 === 0) {
-                this.$message.error("流程启动失败！");
-              } else if (resp2 === -1) {
-                this.$message.error("流程定义不存在，请联系开发人员！");
-              }
-            });
-          } else {
-            this.$message.error("保存失败，请重新检查。");
-          }
-        });
+        // this.addAdvice().then((resp1) => {
+        //   if (resp1 === 1) {
+        //     this.startProcess().then((resp2) => {
+        //       if (resp2 === 1) {
+        //         this.$emit("on-success");
+        //         this.$message.success("创建成功！");
+        //       } else if (resp2 === 0) {
+        //         this.$message.error("流程启动失败！");
+        //       } else if (resp2 === -1) {
+        //         this.$message.error("流程定义不存在，请联系开发人员！");
+        //       }
+        //     });
+        //   } else {
+        //     this.$message.error("保存失败，请重新检查。");
+        //   }
+        // });
+        this.add();
       });
+    },
+    async add() {
+      let response = await this.startProcess();
+      if (response === 1) {
+        this.addAdvice();
+      } else if (response === 0) {
+        this.$message.error("流程启动失败，请联系开发人员！");
+      } else if (response === -1) {
+        this.$message.error("流程定义不存在，请联系开发人员！");
+      }
     },
     async addAdvice() {
       this.formData.creator = "总集";
@@ -215,9 +226,10 @@ export default {
       let response = null;
       response = await addAdvice(this.formData);
       if (response.code == 200) {
-        return 1;
+        this.$emit("on-success");
+        this.$message.success("创建成功！");
       } else {
-        return 0;
+        this.$message.error("保存失败，请重新检查。");
       }
     },
     async startProcess() {

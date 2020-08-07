@@ -4,7 +4,7 @@ import {
 } from "./app";
 export const services = {
   sys: {
-    query: `http://${IP}/onemapsrv/getBQueryResult?appid=sysData&name=`,
+    query: `http://${IP}/onemapsrv/getBQueryResult?appid=SysData&Dappid=${appId}&name=getUser&id=`,
     gridCols: `http://${IP}/onemapsrv/gridcols?appid=sysData&gridname=`,
     gridData: `http://${IP}/onemapsrv/gridData?appid=sysData&gridname=`,
     login: `http://${IP}/onemapsrv/login?appid=${appId}`,
